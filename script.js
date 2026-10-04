@@ -36,3 +36,33 @@ document.querySelectorAll('.ba-box').forEach(box => {
   range.addEventListener('input', set);
   set();
 });
+
+const estimateForm = document.getElementById('estimate-form');
+function buildMailto(form) {
+    const f = new FormData(form);
+    const to = ['redacted', 'gmail.com'].join('@');
+    const line = (label, key) => label + ': ' + ((f.get(key) || '').toString().trim() || '-');
+    const body = [
+      "Hi Wolf's Landscaping, I'd like a free estimate.",
+      '',
+      line('Name', 'name'),
+      line('Phone', 'phone'),
+      line('Email', 'email'),
+      line('Address or town', 'address'),
+      line('Service needed', 'service'),
+      line('Best way to reach me', 'contact_pref'),
+      '',
+      'Project details:',
+      (f.get('message') || '').toString().trim() || '-'
+    ].join('\r\n');
+    const subject = 'Estimate request: ' + f.get('service') + ' (' + f.get('name') + ')';
+    return 'mailto:' + to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+}
+if (estimateForm) {
+  estimateForm.addEventListener('submit', e => {
+    e.preventDefault();
+    window.location.href = buildMailto(estimateForm);
+    document.getElementById('form-status').textContent =
+      "Your email app should open with your request ready. Press Send there. If nothing opened, call 610-357-1098.";
+  });
+}
