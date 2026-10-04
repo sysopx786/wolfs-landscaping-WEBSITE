@@ -1,35 +1,50 @@
+/* Mobile menu */
 const menu = document.querySelector('.menu');
 const nav = document.getElementById('nav');
+if (menu && nav) {
+  menu.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    menu.setAttribute('aria-expanded', open);
+  });
+  nav.addEventListener('click', e => {
+    if (e.target.closest('a')) {
+      nav.classList.remove('open');
+      menu.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
 
-menu.addEventListener('click', () => {
-  const open = nav.classList.toggle('open');
-  menu.setAttribute('aria-expanded', open);
-});
-nav.addEventListener('click', e => {
-  if (e.target.tagName === 'A') {
-    nav.classList.remove('open');
-    menu.setAttribute('aria-expanded', 'false');
-  }
-});
+/* Footer year */
+const yearEl = document.getElementById('year');
+if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-document.getElementById('year').textContent = new Date().getFullYear();
-
+/* Services dropdown: click/tap on the caret, Esc to close, click outside to close */
 document.querySelectorAll('.dd').forEach(dd => {
   const btn = dd.querySelector('.dd-toggle');
+  if (!btn) return;
   btn.addEventListener('click', () => {
     const open = dd.classList.toggle('open');
     btn.setAttribute('aria-expanded', open);
   });
   dd.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { dd.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); btn.focus(); }
+    if (e.key === 'Escape') {
+      dd.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.focus();
+    }
   });
 });
 document.addEventListener('click', e => {
   document.querySelectorAll('.dd.open').forEach(dd => {
-    if (!dd.contains(e.target)) { dd.classList.remove('open'); dd.querySelector('.dd-toggle').setAttribute('aria-expanded', 'false'); }
+    if (!dd.contains(e.target)) {
+      dd.classList.remove('open');
+      const b = dd.querySelector('.dd-toggle');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    }
   });
 });
 
+/* Before/after sliders */
 document.querySelectorAll('.ba-box').forEach(box => {
   const range = box.querySelector('.ba-range');
   const set = () => box.style.setProperty('--pos', range.value + '%');
@@ -37,52 +52,51 @@ document.querySelectorAll('.ba-box').forEach(box => {
   set();
 });
 
-const estimateForm = document.getElementById('estimate-form');
-const CRLF = String.fromCharCode(13, 10);
-
-function buildMessage(form) {
-  const f = new FormData(form);
-  const val = key => (f.get(key) || '').toString().trim() || '-';
-  const body = [
-    "Hi Wolf's Landscaping, I'd like a free estimate.",
-    '',
-    'Name: ' + val('name'),
-    'Phone: ' + val('phone'),
-    'Email: ' + val('email'),
-    'Address or town: ' + val('address'),
-    'Service needed: ' + val('service'),
-    'Best way to reach me: ' + val('contact_pref'),
-    '',
-    'Project details:',
-    val('message')
-  ].join(CRLF);
-  const subject = 'Estimate request: ' + val('service') + ' (' + val('name') + ')';
-  const to = ['redacted', 'gmail.com'].join('@');
-  const q = encodeURIComponent;
-  return {
-    to, subject, body,
-    mailto: 'mailto:' + to + '?subject=' + q(subject) + '&body=' + q(body),
-    gmail: 'https://mail.google.com/mail/?view=cm&fs=1&to=' + q(to) + '&su=' + q(subject) + '&body=' + q(body)
-  };
+/* Back to top */
+const toTop = document.querySelector('.to-top');
+if (toTop) {
+  const toggle = () => { toTop.hidden = window.scrollY < 700; };
+  window.addEventListener('scroll', toggle, { passive: true });
+  toggle();
+  toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 }
 
+/* Estimate form: builds a text message on the visitor's own device. Nothing is sent by the site. */
+const estimateForm = document.getElementById('estimate-form');
 if (estimateForm) {
+  const i18n = JSON.parse(document.getElementById('form-i18n').textContent);
+  const NL = String.fromCharCode(10);
+
+  const buildMessage = () => {
+    const f = new FormData(estimateForm);
+    const val = key => (f.get(key) || '').toString().trim() || '-';
+    return [
+      i18n.hi,
+      '',
+      i18n.lbl.name + ': ' + val('name'),
+      i18n.lbl.phone + ': ' + val('phone'),
+      i18n.lbl.email + ': ' + val('email'),
+      i18n.lbl.address + ': ' + val('address'),
+      i18n.lbl.service + ': ' + val('service'),
+      i18n.lbl.pref + ': ' + val('contact_pref'),
+      '',
+      i18n.lbl.details + ':',
+      val('message')
+    ].join(NL);
+  };
+
   estimateForm.addEventListener('submit', e => {
     e.preventDefault();
-    const m = buildMessage(estimateForm);
-    document.getElementById('open-mail').href = m.mailto;
-    document.getElementById('open-gmail').href = m.gmail;
-    document.getElementById('to-addr').textContent = m.to;
-    const copyBtn = document.getElementById('copy-msg');
-    const copyStatus = document.getElementById('copy-status');
-    copyStatus.textContent = '';
-    copyBtn.onclick = async () => {
-      const text = 'To: ' + m.to + CRLF + 'Subject: ' + m.subject + CRLF + CRLF + m.body;
+    const text = buildMessage();
+    document.getElementById('open-sms').href = 'sms:' + i18n.tel + '?&body=' + encodeURIComponent(text);
+    const status = document.getElementById('copy-status');
+    status.textContent = '';
+    document.getElementById('copy-msg').onclick = async () => {
       try {
         await navigator.clipboard.writeText(text);
-        copyStatus.textContent = 'Copied. Paste it into a new email, or text it to 610-357-1098.';
+        status.textContent = i18n.copied;
       } catch (err) {
-        copyStatus.textContent = 'Could not copy automatically. Please call 610-357-1098 instead.';
+        status.textContent = i18n.copyfail;
       }
     };
     const result = document.getElementById('form-result');

@@ -1,0 +1,460 @@
+"""Static site generator for Wolf's Landscaping Services (English + Spanish).
+Run from anywhere:  python tools/build.py
+Edit copy in tools/content.py, styles in styles.css, behavior in script.js.
+"""
+import os, re, json, hashlib, html, datetime
+import content as C
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SITE = C.SITE
+URL = SITE["url"]
+e = html.escape
+TODAY = datetime.date.today().isoformat()
+SLUGS = [s["slug"] for s in C.SERVICES]
+SVC = {s["slug"]: s for s in C.SERVICES}
+LANGS = ("en", "es")
+LOCALE = {"en": "en_US", "es": "es_US"}
+
+
+def h8(name):
+    return hashlib.md5(open(os.path.join(ROOT, name), "rb").read()).hexdigest()[:8]
+
+
+VER = {"css": h8("styles.css"), "js": h8("script.js")}
+
+
+def fname(key):
+    return "index.html" if key == "index" else key + ".html"
+
+
+def prefix(lang):
+    return "es/" if lang == "es" else ""
+
+
+def asset(lang):
+    return "../" if lang == "es" else ""
+
+
+def pub_url(lang, key):
+    return f"{URL}/{prefix(lang)}{fname(key)}"
+
+
+def other(lang):
+    return "es" if lang == "en" else "en"
+
+
+def md(text):
+    """escape, then turn [label](page-key) into links"""
+    t = e(text)
+    return re.sub(r"\[(.+?)\]\(([a-z\-]+)\)", lambda m: f'<a href="{fname(m.group(2))}">{m.group(1)}</a>', t)
+
+
+def write(lang, key, text):
+    d = os.path.join(ROOT, prefix(lang).rstrip("/"))
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, fname(key)), "w", encoding="utf-8", newline="\n") as f:
+        f.write(text)
+
+
+# ------------------------------------------------------------------ shared pieces
+def head(lang, key, title, desc, schema=None):
+    ui = C.UI[lang]
+    a = asset(lang)
+    full_title = f"{title} | {SITE['name']}"
+    alts = "\n".join(
+        f'<link rel="alternate" hreflang="{l}" href="{pub_url(l, key)}">' for l in LANGS
+    ) + f'\n<link rel="alternate" hreflang="x-default" href="{pub_url("en", key)}">'
+    ld = f'<script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>' if schema else ""
+    return f"""<!DOCTYPE html>
+<html lang="{lang}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{e(full_title)}</title>
+<meta name="description" content="{e(desc)}">
+<meta name="theme-color" content="#1f3f28">
+<link rel="canonical" href="{pub_url(lang, key)}">
+{alts}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{e(SITE['name'])}">
+<meta property="og:title" content="{e(full_title)}">
+<meta property="og:description" content="{e(desc)}">
+<meta property="og:url" content="{pub_url(lang, key)}">
+<meta property="og:image" content="{URL}/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{e(SITE['name'])}, {e(ui['footer_area'])}">
+<meta property="og:locale" content="{LOCALE[lang]}">
+<meta property="og:locale:alternate" content="{LOCALE[other(lang)]}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{e(full_title)}">
+<meta name="twitter:description" content="{e(desc)}">
+<meta name="twitter:image" content="{URL}/og-image.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232f5d3a'/%3E%3Cpath d='M16 6c4 4 7 8 7 12a7 7 0 0 1-14 0c0-4 3-8 7-12z' fill='%23f4efe4'/%3E%3C/svg%3E">
+<link rel="preload" href="{a}fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{a}fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{a}styles.css?v={VER['css']}">
+{ld}
+</head>"""
+
+
+def header(lang, key):
+    ui = C.UI[lang]
+    a = asset(lang)
+    items = "".join(f'<li><a href="{s}.html">{e(SVC[s][lang]["name"])}</a></li>' for s in SLUGS)
+    cur = lambda k: ' aria-current="page"' if key == k else ""
+    other_href = (("../" if lang == "es" else "es/") + fname(key))
+    return f"""<body>
+<a class="skip" href="#top">{e(ui['skip'])}</a>
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="index.html" aria-label="{e(SITE['name'])}">
+      <svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2f5d3a"/><path d="M16 6c4 4 7 8 7 12a7 7 0 0 1-14 0c0-4 3-8 7-12z" fill="#f4efe4"/></svg>
+      <span>Wolf's <em>Landscaping</em></span>
+    </a>
+    <nav id="nav" aria-label="Main">
+      <a href="index.html"{cur('index')}>{e(ui['nav_home'])}</a>
+      <div class="dd"><a href="index.html#services">{e(ui['nav_services'])}</a><button class="dd-toggle" type="button" aria-expanded="false" aria-label="{e(ui['services_menu'])}"></button><ul class="dd-list">{items}</ul></div>
+      <a href="gallery.html"{cur('gallery')}>{e(ui['nav_gallery'])}</a>
+      <a href="index.html#reviews">{e(ui['nav_reviews'])}</a>
+      <a href="faq.html"{cur('faq')}>{e(ui['nav_faq'])}</a>
+      <a href="contact.html"{cur('contact')}>{e(ui['nav_contact'])}</a>
+      <a class="btn btn-small" href="contact.html#estimate">{e(ui['nav_estimate'])}</a>
+      <a class="lang" href="{other_href}" hreflang="{other(lang)}" lang="{other(lang)}" title="{e(ui['switch_title'])}">{e(ui['switch_label'])}</a>
+    </nav>
+    <a class="call" href="tel:{SITE['phone_tel']}">{SITE['phone_display']}</a>
+    <button class="menu" type="button" aria-label="{e(ui['menu'])}" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
+  </div>
+</header>"""
+
+
+def footer(lang):
+    ui = C.UI[lang]
+    a = asset(lang)
+    other_home = ("../" if lang == "es" else "es/") + "index.html"
+    return f"""<footer class="site-footer">
+  <div class="wrap foot">
+    <div><strong>{e(SITE['name'])}</strong><br>{e(ui['footer_area'])}</div>
+    <div><a href="tel:{SITE['phone_tel']}">{SITE['phone_display']}</a></div>
+    <div><a href="privacy.html">{e(ui['privacy'])}</a> &middot; <a href="{other_home}" hreflang="{other(lang)}" lang="{other(lang)}">{e(ui['switch_label'])}</a> &middot; &copy; <span id="year"></span> {e(SITE['name'])}</div>
+  </div>
+  <a class="sticky-call" href="tel:{SITE['phone_tel']}">{e(ui['sticky_call'])}</a>
+  <button class="to-top" type="button" aria-label="{e(ui['back_top'])}" hidden>&uarr;</button>
+</footer>
+<script src="{a}script.js?v={VER['js']}"></script>
+</body>
+</html>
+"""
+
+
+def crumbs(lang, trail):
+    ui = C.UI[lang]
+    parts = [f'<a href="index.html">{e(ui["crumb_home"])}</a>']
+    for label, href in trail[:-1]:
+        parts.append(f'<a href="{href}">{e(label)}</a>')
+    parts.append(f'<span aria-current="page">{e(trail[-1][0])}</span>')
+    return f'<nav class="crumbs" aria-label="{e(ui["crumb_label"])}">' + " / ".join(parts) + "</nav>"
+
+
+def crumb_ld(lang, key, trail):
+    items = [(C.UI[lang]["crumb_home"], pub_url(lang, "index"))]
+    for label, href in trail[:-1]:
+        items.append((label, f"{URL}/{prefix(lang)}{href}"))
+    items.append((trail[-1][0], pub_url(lang, key)))
+    return {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": u} for i, (n, u) in enumerate(items)]}
+
+
+def business_ld():
+    return {
+        "@type": "LandscapingBusiness", "@id": f"{URL}/#business", "name": SITE["name"], "url": URL + "/",
+        "telephone": SITE["phone_tel"], "image": f"{URL}/og-image.jpg",
+        "description": "Owner-operated lawn care, landscape design, hardscaping and retaining walls in Phoenixville and Chester County, PA.",
+        "areaServed": [{"@type": "City", "name": "Phoenixville", "address": {"@type": "PostalAddress", "addressRegion": "PA", "addressCountry": "US"}},
+                       {"@type": "AdministrativeArea", "name": "Chester County, PA"}],
+    }
+
+
+def website_ld():
+    return {"@type": "WebSite", "@id": f"{URL}/#website", "name": SITE["name"], "url": URL + "/", "inLanguage": ["en-US", "es-US"], "publisher": {"@id": f"{URL}/#business"}}
+
+
+def hero(lang, trail, h1, lead, show_cta=True):
+    ui = C.UI[lang]
+    cta = f'<div class="cta-row"><a class="btn" href="contact.html#estimate">{e(ui["cta_btn"])}</a></div>' if show_cta else ""
+    lead_html = f'<p class="lead">{e(lead)}</p>' if lead else ""
+    return f"""<section class="hero page-hero"><div class="wrap hero-inner">
+{crumbs(lang, trail)}
+<h1>{e(h1)}</h1>
+{lead_html}
+{cta}
+</div></section>"""
+
+
+def picture(lang, key, which, alt, lazy=True):
+    a = asset(lang)
+    base = f"{a}photos/{key}-{which}"
+    ws = ", ".join(f"{base}-{w}.webp {w}w" for w in (480, 800, 1168))
+    js = f"{base}-480.jpg 480w, {base}-800.jpg 800w, {base}.jpg 1168w"
+    ld = ' loading="lazy"' if lazy else ""
+    return (f'<picture class="ba-{which}"><source type="image/webp" srcset="{ws}" sizes="(max-width: 700px) 92vw, 560px">'
+            f'<img src="{base}-800.jpg" srcset="{js}" sizes="(max-width: 700px) 92vw, 560px" alt="{e(alt)}" width="1168" height="880"{ld} decoding="async"></picture>')
+
+
+def slider(lang, sh):
+    ui = C.UI[lang]
+    t = sh[lang]
+    # DOM order: after underneath, before on top (clipped)
+    return f"""<figure class="ba">
+  <div class="ba-box" style="--pos:50%">
+    {picture(lang, sh['key'], 'after', f"{ui['after']} ({ui['ai_badge']}): {t['after']}")}
+    {picture(lang, sh['key'], 'before', f"{ui['before']} ({ui['ai_badge']}): {t['before']}")}
+    <span class="ba-tag ba-tag-b">{e(ui['before'])}</span><span class="ba-tag ba-tag-a">{e(ui['after'])}</span>
+    <span class="ba-line" aria-hidden="true"></span>
+    <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="{e(ui['before'])} / {e(ui['after'])}: {e(t['title'])}">
+  </div>
+  <figcaption><strong>{e(t['title'])}</strong> <span class="ai-badge">{e(ui['ai_badge'])}</span><br><a href="{sh['link']}.html">{e(ui['about'])} {e(t['linkname'])} &rarr;</a></figcaption>
+</figure>"""
+
+
+def form(lang):
+    f = C.PAGES[lang]["form"]
+    ui = C.UI[lang]
+    opts = "".join(f"<option>{e(s)}</option>" for s in f["services"])
+    prefs = "".join(f"<option>{e(s)}</option>" for s in f["prefs"])
+    i18n = {"hi": f["hi"], "lbl": f["lbl"], "copied": f["copied"], "copyfail": f["copyfail"], "tel": SITE["phone_tel"], "display": SITE["phone_display"]}
+    return f"""<form id="estimate-form" aria-describedby="form-help">
+  <label>{e(f['name'])}<input type="text" name="name" required autocomplete="name"></label>
+  <div class="row">
+    <label>{e(f['phone'])}<input name="phone" type="tel" required autocomplete="tel"></label>
+    <label>{e(f['email'])}<input name="email" type="email" autocomplete="email"></label>
+  </div>
+  <label>{e(f['address'])}<input type="text" name="address" required autocomplete="address-level2"></label>
+  <label>{e(f['service'])}
+    <select name="service" required><option value="">{e(f['choose'])}</option>{opts}</select>
+  </label>
+  <label>{e(f['message'])}<textarea name="message" rows="4"></textarea></label>
+  <label>{e(f['pref'])}<select name="contact_pref">{prefs}</select></label>
+  <button class="btn" type="submit">{e(f['submit'])}</button>
+  <p id="form-help" class="form-help">{e(f['help'])}</p>
+  <div id="form-result" class="form-result" role="status" aria-live="polite" hidden>
+    <p><strong>{e(f['ready'])}</strong> {e(f['choose_how'])}</p>
+    <div class="result-actions">
+      <a class="btn" id="open-sms" href="#">{e(f['text_btn'])}</a>
+      <button class="btn btn-ghost dark" id="copy-msg" type="button">{e(f['copy_btn'])}</button>
+      <a class="btn btn-ghost dark" href="tel:{SITE['phone_tel']}">{e(f['call_btn'])}</a>
+    </div>
+    <p class="form-help">{e(f['note'])}</p>
+    <p id="copy-status" class="form-status"></p>
+  </div>
+  <script type="application/json" id="form-i18n">{json.dumps(i18n, ensure_ascii=False)}</script>
+</form>"""
+
+
+def faq_html(items):
+    return '<div class="faq">' + "".join(f"<details><summary>{e(q)}</summary><p>{md(a)}</p></details>" for q, a in items) + "</div>"
+
+
+def page(lang, key, title, desc, body, schema_graph=None):
+    schema = {"@context": "https://schema.org", "@graph": schema_graph} if schema_graph else None
+    write(lang, key, head(lang, key, title, desc, schema) + "\n" + header(lang, key) + f'\n<main id="top">\n{body}\n</main>\n' + footer(lang))
+
+
+# ------------------------------------------------------------------ pages
+def build_lang(lang):
+    ui = C.UI[lang]
+    P = C.PAGES[lang]
+
+    # ---- home
+    cards = "".join(
+        f'<article class="card"><h3><a href="{k}.html">{e(n)}</a></h3><p>{e(d)}</p><ul>' + "".join(f"<li>{e(i)}</li>" for i in items) + f'</ul><p class="more"><a href="{k}.html">{e(ui["about"])} {e(n.lower())} &rarr;</a></p></article>'
+        for k, n, d, items in P["cards"])
+    proof = "".join(f"<li><strong>{e(a)}</strong> {e(b)}</li>" for a, b in P["proof"])
+    trust = "".join(f"<span>{e(t)}</span>" for t in P["trust"])
+    steps = "".join(f'<li><span>{i + 1}</span><h3>{e(h)}</h3><p>{e(t)}</p></li>' for i, (h, t) in enumerate(P["steps"]))
+    quotes = "".join(f'<blockquote><p>“{e(q)}”</p><cite>{e(n)} &middot; {e(s[lang])}</cite></blockquote>' for q, n, s in C.REVIEWS)
+    orig = f'<p class="sub">{e(ui["reviews_orig"])}</p>' if ui["reviews_orig"] else ""
+    towns = "".join(f"<li>{e(t)}</li>" for t in C.TOWNS)
+    why = "".join(f"<li>{e(w)}</li>" for w in P["why"])
+    home = f"""<section class="hero">
+  <div class="wrap hero-inner">
+    <p class="eyebrow">{e(P['eyebrow'])}</p>
+    <h1>{e(P['h1'])}</h1>
+    <p class="lead">{e(P['lead'])}</p>
+    <div class="cta-row">
+      <a class="btn" href="contact.html#estimate">{e(ui['cta_btn'])}</a>
+      <a class="btn btn-ghost" href="tel:{SITE['phone_tel']}">{e(ui['call'])} {SITE['phone_display']}</a>
+    </div>
+    <ul class="proof">{proof}</ul>
+  </div>
+</section>
+<section class="trust-strip" aria-label="{e(ui['nav_reviews'])}"><div class="wrap">{trust}</div></section>
+<section id="services" class="section"><div class="wrap">
+  <h2>{e(P['services_h'])}</h2><p class="sub">{e(P['services_sub'])}</p>
+  <div class="grid cards">{cards}</div>
+</div></section>
+<section id="work" class="section alt"><div class="wrap">
+  <h2>{e(P['work_h'])}</h2>
+  <p class="sub">{e(P['work_sub'])} <span class="ai-badge">{e(ui['ai_badge'])}</span></p>
+  <div class="ba-single">{slider(lang, C.SHOTS[0])}</div>
+  <p class="center"><a class="btn btn-ghost dark" href="gallery.html">{e(ui['see_more_ba'])}</a></p>
+</div></section>
+<section id="process" class="section"><div class="wrap">
+  <h2>{e(P['process_h'])}</h2>
+  <ol class="steps">{steps}</ol>
+</div></section>
+<section id="reviews" class="section alt"><div class="wrap">
+  <h2>{e(P['reviews_h'])}</h2>
+  <p class="sub"><strong>4.7 ★</strong> &middot; {e(ui['google_label'])}</p>
+  {orig}
+  <div class="grid quotes">{quotes}</div>
+  <p class="center"><a class="btn btn-ghost dark" href="https://www.google.com/maps/search/?api=1&amp;query=Wolf%27s+Landscaping+Services+Phoenixville+PA" target="_blank" rel="noopener">{e(ui['google_btn'])}</a></p>
+</div></section>
+<section id="areas" class="section"><div class="wrap two">
+  <div><h2>{e(P['area_h'])}</h2><p>{e(P['area_p'])}</p><ul class="towns">{towns}</ul></div>
+  <div class="callout"><h3>{e(P['why_h'])}</h3><ul class="checks">{why}</ul></div>
+</div></section>
+<section class="section cta-band"><div class="wrap center">
+  <h2>{e(ui['cta_title'])}</h2><p>{e(ui['cta_text'])}</p>
+  <p class="cta-row center-row"><a class="btn" href="contact.html#estimate">{e(ui['cta_btn'])}</a></p>
+</div></section>"""
+    page(lang, "index", P["home_title"], P["home_desc"], home, [business_ld(), website_ld()])
+
+    # ---- service pages
+    for s in C.SERVICES:
+        d = s[lang]
+        key = s["slug"]
+        trail = [(ui["nav_services"], "index.html#services"), (d["name"], fname(key))]
+        inc = "".join(f"<li>{e(i)}</li>" for i in d["includes"])
+        how = "".join(f'<div class="card"><h3>{e(h)}</h3><p>{e(t)}</p></div>' for h, t in d["how"])
+        rel = "".join(f'<a class="rel" href="{r}.html">{e(SVC[r][lang]["name"])}</a>' for s2 in [s] for r in s2["related"])
+        body = f"""{hero(lang, trail, d['name'], d['tag'])}
+<section class="section"><div class="wrap two">
+  <div class="prose">{''.join(f'<p>{e(p)}</p>' for p in d['intro'])}</div>
+  <div class="callout"><h2 class="h3">{e(ui['included'])}</h2><ul class="checks">{inc}</ul></div>
+</div></section>
+<section class="section alt"><div class="wrap"><h2>{e(ui['how_we_work'])}</h2><div class="grid cards">{how}</div></div></section>
+<section class="section"><div class="wrap narrow"><h2>{e(ui['common_q'])}</h2>{faq_html(d['faq'])}
+<p class="more"><a href="faq.html">{e(ui['more_q'])} &rarr;</a></p></div></section>
+<section class="section cta-band"><div class="wrap center"><h2>{e(ui['cta_title'])}</h2><p>{e(ui['cta_text'])}</p>
+<p class="cta-row center-row"><a class="btn" href="contact.html#estimate">{e(ui['cta_btn'])}</a></p></div></section>
+<section class="section alt"><div class="wrap"><h2 class="h3">{e(ui['related'])}</h2><div class="rels">{rel}</div></div></section>"""
+        graph = [
+            {"@type": "Service", "name": d["name"], "description": d["desc"], "inLanguage": lang, "provider": {"@id": f"{URL}/#business"},
+             "areaServed": [{"@type": "City", "name": "Phoenixville"}, {"@type": "AdministrativeArea", "name": "Chester County, PA"}]},
+            crumb_ld(lang, key, trail),
+            {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": re.sub(r"\[(.+?)\]\(([a-z\-]+)\)", r"\1", a)}} for q, a in d["faq"]]},
+        ]
+        page(lang, key, d["title"], d["desc"], body, graph)
+
+    # ---- gallery
+    trail = [(P["gallery_h"], "gallery.html")]
+    shots = "".join(slider(lang, s) for s in C.SHOTS)
+    body = f"""{hero(lang, trail, P['gallery_h'], ui['slider_hint'], show_cta=False)}
+<section class="section"><div class="wrap">
+<p class="notice"><strong>{e(ui['gallery_notice'])}</strong> {e(ui['ai_note'])}</p>
+<div class="ba-grid">{shots}</div>
+<p class="more">{e(ui['gallery_cta'])} <a href="contact.html#estimate">{e(ui['cta_btn'])}</a> &middot; <a href="tel:{SITE['phone_tel']}">{SITE['phone_display']}</a></p>
+</div></section>"""
+    page(lang, "gallery", P["gallery_title"], P["gallery_desc"], body, [crumb_ld(lang, "gallery", trail)])
+
+    # ---- faq
+    trail = [(P["faq_h"], "faq.html")]
+    groups = "".join(f"<h2>{e(g)}</h2>{faq_html(qs)}" for g, qs in C.FAQ_GEN[lang])
+    body = f"""{hero(lang, trail, P['faq_h'], "", show_cta=False)}
+<section class="section"><div class="wrap narrow">{groups}
+<p class="more">{e(P['faq_foot'])} <a href="contact.html#estimate">{e(P['faq_foot_link'])}</a> &middot; <a href="tel:{SITE['phone_tel']}">{SITE['phone_display']}</a></p></div></section>"""
+    qa = [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": re.sub(r"\[(.+?)\]\(([a-z\-]+)\)", r"\1", a)}} for _, qs in C.FAQ_GEN[lang] for q, a in qs]
+    page(lang, "faq", P["faq_title"], P["faq_desc"], body, [{"@type": "FAQPage", "mainEntity": qa}, crumb_ld(lang, "faq", trail)])
+
+    # ---- contact
+    trail = [(ui["nav_contact"], "contact.html")]
+    body = f"""{hero(lang, trail, P['contact_h'], P['contact_lead'], show_cta=False)}
+<section class="section"><div class="wrap two">
+  <div class="quote-copy">
+    <p class="phone">{e(P['contact_call'])} <a href="tel:{SITE['phone_tel']}">{SITE['phone_display']}</a></p>
+    <p>{e(P['contact_miss'])}</p>
+    <h2 class="h3">{e(P['area_h'])}</h2>
+    <p>{e(P['area_p'])}</p>
+    <ul class="towns">{towns}</ul>
+  </div>
+  <div id="estimate">{form(lang)}</div>
+</div></section>"""
+    page(lang, "contact", P["contact_title"], P["contact_desc"], body, [crumb_ld(lang, "contact", trail)])
+
+    # ---- privacy
+    trail = [(ui["privacy"], "privacy.html")]
+    parts = "".join(f"<{t}>{e(x)}</{t}>" for t, x in P["privacy"])
+    body = f"""{hero(lang, trail, P['privacy_h'], "", show_cta=False)}
+<section class="section"><div class="wrap narrow prose"><p class="notice">{e(P['privacy_draft'])}</p>{parts}</div></section>"""
+    page(lang, "privacy", P["privacy_title"], P["privacy_desc"], body, [crumb_ld(lang, "privacy", trail)])
+
+
+for lg in LANGS:
+    build_lang(lg)
+
+# ------------------------------------------------------------------ crawl files
+KEYS = ["index"] + SLUGS + ["gallery", "faq", "contact", "privacy"]
+sm = ['<?xml version="1.0" encoding="UTF-8"?>',
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
+for lg in LANGS:
+    for k in KEYS:
+        sm.append("<url>")
+        sm.append(f"<loc>{pub_url(lg, k)}</loc>")
+        sm.append(f"<lastmod>{TODAY}</lastmod>")
+        for l2 in LANGS:
+            sm.append(f'<xhtml:link rel="alternate" hreflang="{l2}" href="{pub_url(l2, k)}"/>')
+        sm.append(f'<xhtml:link rel="alternate" hreflang="x-default" href="{pub_url("en", k)}"/>')
+        sm.append("</url>")
+sm.append("</urlset>")
+open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8", newline="\n").write("\n".join(sm) + "\n")
+
+robots = f"""User-agent: *
+Allow: /
+
+# Search and AI-answer crawlers are welcome
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: {URL}/sitemap.xml
+"""
+open(os.path.join(ROOT, "robots.txt"), "w", encoding="utf-8", newline="\n").write(robots)
+
+llms = f"""# {SITE['name']}
+
+> Owner-operated landscaping company serving Phoenixville and Chester County, Pennsylvania. Lawn care, landscape design, hardscaping, retaining walls, drainage and grading, sod and seeding, seasonal cleanup, tree work and snow removal. Free estimates. Phone: {SITE['phone_display']}.
+
+## Pages
+""" + "\n".join(f"- [{SVC[s]['en']['name']}]({URL}/{s}.html): {SVC[s]['en']['desc']}" for s in SLUGS) + f"""
+- [FAQ]({URL}/faq.html)
+- [Contact and free estimate]({URL}/contact.html)
+- [Gallery]({URL}/gallery.html): AI-generated concept illustrations, not photos of finished projects
+- [Español]({URL}/es/index.html): Spanish version of this site
+"""
+open(os.path.join(ROOT, "llms.txt"), "w", encoding="utf-8", newline="\n").write(llms)
+
+not_found = f"""<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="{URL}/"><meta name="robots" content="noindex">
+<title>Page not found | {e(SITE['name'])}</title>
+<link rel="stylesheet" href="styles.css?v={VER['css']}"></head>
+<body><main id="top"><section class="section"><div class="wrap narrow center">
+<h1>Page not found</h1><p>That page doesn't exist. Try the <a href="index.html">home page</a>, our <a href="contact.html">contact page</a>, or call <a href="tel:{SITE['phone_tel']}">{SITE['phone_display']}</a>.</p>
+<p><a href="es/index.html" lang="es" hreflang="es">Ver este sitio en español</a></p>
+</div></section></main></body></html>
+"""
+open(os.path.join(ROOT, "404.html"), "w", encoding="utf-8", newline="\n").write(not_found)
+
+n = sum(len(f) for _, _, f in os.walk(ROOT) if False)
+print("built", len(KEYS) * 2, "pages +404, sitemap.xml, robots.txt, llms.txt | css v", VER["css"], "js v", VER["js"])

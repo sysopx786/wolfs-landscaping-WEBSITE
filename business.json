@@ -1,0 +1,66 @@
+{
+  "_note": "Reference record of public business facts and brand settings.",
+  "name": "Wolf's Landscaping Services",
+  "owner": {
+    "name": "Bryan J. Wolf",
+    "role": "Owner"
+  },
+  "phone": {
+    "value": "610-357-1098",
+    "tel": "+16103571098"
+  },
+  "contact_method": "Estimate requests are sent by text message to the business phone. No email address is published.",
+  "address": {
+    "street": "429 Main St",
+    "city": "Royersford",
+    "state": "PA",
+    "zip": "19468"
+  },
+  "service_area": [
+    "Royersford, PA (business location)",
+    "Chester County"
+  ],
+  "services": [
+    "Lawn care & maintenance",
+    "Landscape design & installation",
+    "Hardscaping",
+    "Retaining walls",
+    "Drainage & grading",
+    "Aeration, sod & seeding",
+    "Seasonal cleanup",
+    "Tree work",
+    "Snow removal"
+  ],
+  "languages": [
+    "en",
+    "es"
+  ],
+  "google_business_profile": {
+    "url": "https://www.google.com/maps?cid=2486202383414944340",
+    "place_id": "ChIJ0VPVILEDmSgRVGItL-XDgCI",
+    "write_review_url": "https://search.google.com/local/writereview?placeid=ChIJ0VPVILEDmSgRVGItL-XDgCI",
+    "rating": 5.0,
+    "review_count": 14
+  },
+  "brand": {
+    "colors": {
+      "green": "#2f5d3a",
+      "green_dark": "#1f3f28",
+      "sage": "#e7ede2",
+      "sand": "#f4efe4",
+      "accent": "#a8651a",
+      "accent_dark": "#8f5513",
+      "ink": "#1d241e"
+    },
+    "logo": "text wordmark",
+    "fonts": {
+      "headings": "Fraunces (self-hosted)",
+      "body": "Inter (self-hosted)"
+    }
+  },
+  "site": {
+    "public_url": "https://sysopx786.github.io/wolfs-landscaping-WEBSITE/",
+    "repo": "https://github.com/sysopx786/wolfs-landscaping-WEBSITE",
+    "hosting": "GitHub Pages (main branch, root)"
+  }
+}
