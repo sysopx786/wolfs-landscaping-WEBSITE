@@ -15,12 +15,21 @@ SITE = dict(
 TOWNS = ["Phoenixville", "Spring City", "Royersford", "Oaks", "Collegeville", "Kimberton",
          "Chester Springs", "Malvern", "Exton", "Downingtown", "West Chester", "Valley Forge"]
 
+# Owner details for the About page. Leave empty until the owner confirms them: anything empty is simply not shown.
+# Fill in, then run: python tools/build.py
+OWNER = dict(
+    name=None,            # e.g. "Jane Wolf"
+    role=None,            # e.g. "Owner" (shown next to the name)
+    story={"en": [], "es": []},        # paragraphs about how the business started
+    credentials={"en": [], "es": []},  # e.g. ["Fully insured", "Techo-Bloc certified installer"]
+)
+
 UI = {
  "en": dict(
     lang_name="English", switch_label="Español", switch_title="Ver este sitio en español",
     skip="Skip to content", menu="Menu", services_menu="Show services menu",
     nav_home="Home", nav_services="Services", nav_gallery="Gallery", nav_reviews="Reviews",
-    nav_faq="FAQ", nav_contact="Contact", nav_estimate="Free Estimate", call="Call",
+    nav_about="About", nav_faq="FAQ", nav_contact="Contact", nav_estimate="Free Estimate", call="Call",
     crumb_label="Breadcrumb", crumb_home="Home", related="Related services",
     common_q="Common questions", more_q="More questions", included="What's included", how_we_work="How we work",
     cta_title="Ready to talk about your project?", cta_text="Tell us what you have in mind. We reply within 1–2 days by text or email.",
@@ -38,7 +47,7 @@ UI = {
     lang_name="Español", switch_label="English", switch_title="View this site in English",
     skip="Saltar al contenido", menu="Menú", services_menu="Mostrar menú de servicios",
     nav_home="Inicio", nav_services="Servicios", nav_gallery="Galería", nav_reviews="Reseñas",
-    nav_faq="Preguntas", nav_contact="Contacto", nav_estimate="Cotización gratis", call="Llamar",
+    nav_about="Nosotros", nav_faq="Preguntas", nav_contact="Contacto", nav_estimate="Cotización gratis", call="Llamar",
     crumb_label="Ruta de navegación", crumb_home="Inicio", related="Servicios relacionados",
     common_q="Preguntas frecuentes", more_q="Más preguntas", included="Qué incluye", how_we_work="Cómo trabajamos",
     cta_title="¿Listo para hablar de su proyecto?", cta_text="Cuéntenos qué tiene en mente. Respondemos en 1 a 2 días por mensaje de texto o correo.",
@@ -364,6 +373,23 @@ PAGES = {
   gallery_h="Gallery",
   faq_title="FAQ", faq_desc="Answers about estimates, service area, scheduling and services from Wolf's Landscaping Services in Phoenixville, PA.", faq_h="Frequently asked questions",
   faq_foot="Still have a question?", faq_foot_link="Send us a request",
+  about_title="About Us: Owner-Operated Landscaping in Phoenixville, PA",
+  about_desc="Wolf's Landscaping Services is an owner-operated landscaping company in Phoenixville and Chester County, PA. Learn how we work and what customers say.",
+  about_h="About Wolf's Landscaping Services",
+  about_lead="An owner-operated landscaping crew serving Phoenixville and Chester County, PA.",
+  about_who_h="Who we are",
+  about_who=["Wolf's Landscaping Services is an owner-operated landscaping company serving Phoenixville and the surrounding Chester County area. When you call or send a request, you deal with the people who will actually be working on your property.",
+             "We look after lawns and yards week to week, and we build the bigger things too: beds and plantings, walkways and steps, retaining walls, drainage and grading, new lawns, seasonal cleanups, tree work and snow removal."],
+  about_work_h="How we work",
+  about_values=[("We communicate", "You hear back within 1–2 days, and if the weather changes the schedule, we tell you before it becomes a problem."),
+                ("We hold ourselves to our reviews", "Customers most often mention our communication, reliability and hard work. Those are the standards we aim for on every job."),
+                ("Clear, fair pricing", "You get a clear price before any work starts, with no surprises."),
+                ("We check back", "After a job we follow up to make sure you're happy with the result.")],
+  about_say_h="What customers say",
+  about_quotes=[("Very professional and you can tell takes pride in his work. Highly recommended.", "Fred C."),
+                ("Great service, and communication. Very hard working and professional young man.", "Todd E."),
+                ("They do great, beautiful work! They were awesome to deal with!", "Ryan H.")],
+  about_owner_h="Meet the owner", about_story_h="Our story", about_creds_h="Credentials",
   contact_title="Contact & Free Estimate", contact_desc="Request a free landscaping estimate from Wolf's Landscaping Services in Phoenixville and Chester County, PA. Call or send your request by text.", contact_h="Contact & free estimate",
   contact_lead="Tell us about your project. We reply within 1–2 days by text or email.",
   contact_call="Prefer to talk? Call", contact_miss="If we miss your call, leave a voicemail or send this form and we'll get back to you.",
@@ -415,6 +441,23 @@ PAGES = {
   gallery_h="Galería",
   faq_title="Preguntas frecuentes", faq_desc="Respuestas sobre cotizaciones, área de servicio, horarios y servicios de Wolf's Landscaping Services en Phoenixville, PA.", faq_h="Preguntas frecuentes",
   faq_foot="¿Todavía tiene una pregunta?", faq_foot_link="Envíenos una solicitud",
+  about_title="Nosotros: paisajismo con el dueño al frente en Phoenixville, PA",
+  about_desc="Wolf's Landscaping Services es una empresa de paisajismo con el dueño al frente en Phoenixville y el condado de Chester, PA. Conozca cómo trabajamos y qué dicen nuestros clientes.",
+  about_h="Sobre Wolf's Landscaping Services",
+  about_lead="Un equipo de paisajismo con el dueño al frente, al servicio de Phoenixville y el condado de Chester, PA.",
+  about_who_h="Quiénes somos",
+  about_who=["Wolf's Landscaping Services es una empresa de paisajismo con el dueño al frente, que atiende Phoenixville y el área cercana del condado de Chester. Cuando usted llama o envía una solicitud, trata con las personas que realmente trabajarán en su propiedad.",
+             "Cuidamos céspedes y jardines semana a semana, y también hacemos los trabajos más grandes: camas y plantas, caminos y escalones, muros de contención, drenaje y nivelación, céspedes nuevos, limpiezas de temporada, trabajo con árboles y remoción de nieve."],
+  about_work_h="Cómo trabajamos",
+  about_values=[("Nos comunicamos", "Recibe respuesta en 1 a 2 días, y si el clima cambia el horario, le avisamos antes de que sea un problema."),
+                ("Cumplimos lo que dicen las reseñas", "Los clientes mencionan sobre todo nuestra comunicación, confiabilidad y esfuerzo. Esos son los estándares que buscamos en cada trabajo."),
+                ("Precios claros y justos", "Recibe un precio claro antes de empezar cualquier trabajo, sin sorpresas."),
+                ("Damos seguimiento", "Después de un trabajo hacemos una revisión para asegurarnos de que esté contento con el resultado.")],
+  about_say_h="Lo que dicen los clientes",
+  about_quotes=[("Very professional and you can tell takes pride in his work. Highly recommended.", "Fred C."),
+                ("Great service, and communication. Very hard working and professional young man.", "Todd E."),
+                ("They do great, beautiful work! They were awesome to deal with!", "Ryan H.")],
+  about_owner_h="Conozca al dueño", about_story_h="Nuestra historia", about_creds_h="Credenciales",
   contact_title="Contacto y cotización gratis", contact_desc="Solicite una cotización gratis de paisajismo a Wolf's Landscaping Services en Phoenixville y el condado de Chester, PA. Llame o envíe su solicitud por mensaje de texto.", contact_h="Contacto y cotización gratis",
   contact_lead="Cuéntenos sobre su proyecto. Respondemos en 1 a 2 días por mensaje de texto o correo.",
   contact_call="¿Prefiere hablar? Llame al", contact_miss="Si no alcanzamos a contestar, deje un mensaje de voz o envíe este formulario y le devolvemos la llamada.",

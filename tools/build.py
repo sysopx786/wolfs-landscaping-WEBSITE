@@ -115,6 +115,7 @@ def header(lang, key):
     <nav id="nav" aria-label="Main">
       <a href="index.html"{cur('index')}>{e(ui['nav_home'])}</a>
       <div class="dd"><a href="index.html#services">{e(ui['nav_services'])}</a><button class="dd-toggle" type="button" aria-expanded="false" aria-label="{e(ui['services_menu'])}"></button><ul class="dd-list">{items}</ul></div>
+      <a href="about.html"{cur('about')}>{e(ui['nav_about'])}</a>
       <a href="gallery.html"{cur('gallery')}>{e(ui['nav_gallery'])}</a>
       <a href="index.html#reviews">{e(ui['nav_reviews'])}</a>
       <a href="faq.html"{cur('faq')}>{e(ui['nav_faq'])}</a>
@@ -346,6 +347,29 @@ def build_lang(lang):
         ]
         page(lang, key, d["title"], d["desc"], body, graph)
 
+    # ---- about
+    trail = [(ui["nav_about"], "about.html")]
+    who = "".join(f"<p>{e(p)}</p>" for p in P["about_who"])
+    values = "".join(f'<div class="card"><h3>{e(h)}</h3><p>{e(t)}</p></div>' for h, t in P["about_values"])
+    quotes = "".join(f'<blockquote><p>“{e(q)}”</p><cite>{e(n)}</cite></blockquote>' for q, n in P["about_quotes"])
+    owner_html = ""
+    if C.OWNER["name"]:
+        role = f' <span class="role">{e(C.OWNER["role"])}</span>' if C.OWNER.get("role") else ""
+        owner_html += f'<section class="section"><div class="wrap narrow prose"><h2>{e(P["about_owner_h"])}</h2><p class="owner-name"><strong>{e(C.OWNER["name"])}</strong>{role}</p></div></section>'
+    if C.OWNER["story"][lang]:
+        owner_html += f'<section class="section alt"><div class="wrap narrow prose"><h2>{e(P["about_story_h"])}</h2>' + "".join(f"<p>{e(p)}</p>" for p in C.OWNER["story"][lang]) + "</div></section>"
+    if C.OWNER["credentials"][lang]:
+        owner_html += f'<section class="section"><div class="wrap narrow"><h2>{e(P["about_creds_h"])}</h2><ul class="checks">' + "".join(f"<li>{e(c)}</li>" for c in C.OWNER["credentials"][lang]) + "</ul></div></section>"
+    body = f"""{hero(lang, trail, P['about_h'], P['about_lead'])}
+<section class="section"><div class="wrap narrow prose"><h2>{e(P['about_who_h'])}</h2>{who}</div></section>
+{owner_html}
+<section class="section alt"><div class="wrap"><h2>{e(P['about_work_h'])}</h2><div class="grid cards cards-4">{values}</div></div></section>
+<section class="section"><div class="wrap"><h2>{e(P['about_say_h'])}</h2><div class="grid quotes">{quotes}</div>
+<p class="center"><a class="btn btn-ghost dark" href="index.html#reviews">{e(ui['nav_reviews'])} &rarr;</a></p></div></section>
+<section class="section cta-band"><div class="wrap center"><h2>{e(ui['cta_title'])}</h2><p>{e(ui['cta_text'])}</p>
+<p class="cta-row center-row"><a class="btn" href="contact.html#estimate">{e(ui['cta_btn'])}</a></p></div></section>"""
+    page(lang, "about", P["about_title"], P["about_desc"], body, [{"@type": "AboutPage", "name": P["about_h"], "inLanguage": lang, "about": {"@id": f"{URL}/#business"}}, crumb_ld(lang, "about", trail)])
+
     # ---- gallery
     trail = [(P["gallery_h"], "gallery.html")]
     shots = "".join(slider(lang, s) for s in C.SHOTS)
@@ -393,7 +417,7 @@ for lg in LANGS:
     build_lang(lg)
 
 # ------------------------------------------------------------------ crawl files
-KEYS = ["index"] + SLUGS + ["gallery", "faq", "contact", "privacy"]
+KEYS = ["index"] + SLUGS + ["about", "gallery", "faq", "contact", "privacy"]
 sm = ['<?xml version="1.0" encoding="UTF-8"?>',
       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
 for lg in LANGS:
@@ -437,6 +461,7 @@ llms = f"""# {SITE['name']}
 
 ## Pages
 """ + "\n".join(f"- [{SVC[s]['en']['name']}]({URL}/{s}.html): {SVC[s]['en']['desc']}" for s in SLUGS) + f"""
+- [About]({URL}/about.html)
 - [FAQ]({URL}/faq.html)
 - [Contact and free estimate]({URL}/contact.html)
 - [Gallery]({URL}/gallery.html): AI-generated concept illustrations, not photos of finished projects
