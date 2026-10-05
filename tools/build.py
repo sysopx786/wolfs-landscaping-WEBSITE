@@ -175,8 +175,9 @@ def business_ld():
     return {
         "@type": "LandscapingBusiness", "@id": f"{URL}/#business", "name": SITE["name"], "url": URL + "/",
         "telephone": SITE["phone_tel"], "image": f"{URL}/og-image.jpg",
-        "description": "Owner-operated lawn care, landscape design, hardscaping and retaining walls in Phoenixville and Chester County, PA.",
-        "areaServed": [{"@type": "City", "name": "Phoenixville", "address": {"@type": "PostalAddress", "addressRegion": "PA", "addressCountry": "US"}},
+        "address": {"@type": "PostalAddress", "addressLocality": "Royersford", "addressRegion": "PA", "addressCountry": "US"},
+        "description": "Owner-operated lawn care, landscape design, hardscaping and retaining walls in Royersford and Chester County, PA.",
+        "areaServed": [{"@type": "City", "name": "Royersford", "address": {"@type": "PostalAddress", "addressRegion": "PA", "addressCountry": "US"}},
                        {"@type": "AdministrativeArea", "name": "Chester County, PA"}],
     }
 
@@ -275,11 +276,7 @@ def build_lang(lang):
     cards = "".join(
         f'<article class="card"><h3><a href="{k}.html">{e(n)}</a></h3><p>{e(d)}</p><ul>' + "".join(f"<li>{e(i)}</li>" for i in items) + f'</ul><p class="more"><a href="{k}.html">{e(ui["about"])} {e(n.lower())} &rarr;</a></p></article>'
         for k, n, d, items in P["cards"])
-    proof = "".join(
-        (f'<li>{g_icon(lang, "g-mini", 18)}<strong>{C.REVIEWS_META["rating"]} <span class="stars" aria-hidden="true">★</span></strong> {e(b)}</li>' if i == 0
-         else f"<li><strong>{C.REVIEWS_META['count']}</strong> {e(b)}</li>" if i == 1
-         else f"<li><strong>{e(a)}</strong> {e(b)}</li>")
-        for i, (a, b) in enumerate(P["proof"]))
+    proof = "".join(f"<li><strong>{e(a)}</strong> {e(b)}</li>" for a, b in P["proof"])
     trust = "".join(f"<span>{e(t)}</span>" for t in P["trust"])
     steps = "".join(f'<li><span>{i + 1}</span><h3>{e(h)}</h3><p>{e(t)}</p></li>' for i, (h, t) in enumerate(P["steps"]))
     def cite_of(r):
@@ -299,14 +296,14 @@ def build_lang(lang):
       <a class="btn" href="contact.html#estimate">{e(ui['cta_btn'])}</a>
       <a class="btn btn-ghost" href="tel:{SITE['phone_tel']}">{e(ui['call'])} {SITE['phone_display']}</a>
     </div>
+    <div class="hero-reviews">
+      <p class="google-line">{g_icon(lang, "g-logo", 24)}<span class="stars" aria-hidden="true">★★★★★</span> <strong>{C.REVIEWS_META["rating"]}</strong> <span class="sr-only">{e(ui['rating_sr'])}</span> <span class="google-label">{e(ui['google_label'])} ({C.REVIEWS_META['count']})</span></p>
+      <p class="btn-row"><a class="btn btn-small" href="{C.SITE['google_write_review_url']}" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(ui['write_btn'])}</a> <a class="btn btn-ghost btn-small" href="reviews.html">{e(ui['see_all'])}</a></p>
+    </div>
     <ul class="proof">{proof}</ul>
   </div>
 </section>
 <section class="trust-strip" aria-label="{e(ui['nav_reviews'])}"><div class="wrap">{trust}</div></section>
-<section class="review-bar" aria-label="{e(ui['google_label'])}"><div class="wrap">
-  <p class="google-line">{g_icon(lang, "g-logo", 24)}<span class="stars" aria-hidden="true">★★★★★</span> <strong>{C.REVIEWS_META["rating"]}</strong> <span class="sr-only">{e(ui['rating_sr'])}</span> <span class="google-label">{e(ui['google_label'])} ({C.REVIEWS_META['count']})</span></p>
-  <p class="btn-row"><a class="btn btn-small" href="{C.SITE['google_write_review_url']}" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(ui['write_btn'])}</a> <a class="btn btn-ghost dark btn-small" href="reviews.html">{e(ui['see_all'])}</a></p>
-</div></section>
 <section id="services" class="section"><div class="wrap">
   <h2>{e(P['services_h'])}</h2><p class="sub">{e(P['services_sub'])}</p>
   <div class="grid cards">{cards}</div>
@@ -359,7 +356,7 @@ def build_lang(lang):
 <section class="section alt"><div class="wrap"><h2 class="h3">{e(ui['related'])}</h2><div class="rels">{rel}</div></div></section>"""
         graph = [
             {"@type": "Service", "name": d["name"], "description": d["desc"], "inLanguage": lang, "provider": {"@id": f"{URL}/#business"},
-             "areaServed": [{"@type": "City", "name": "Phoenixville"}, {"@type": "AdministrativeArea", "name": "Chester County, PA"}]},
+             "areaServed": [{"@type": "City", "name": "Royersford"}, {"@type": "AdministrativeArea", "name": "Chester County, PA"}]},
             crumb_ld(lang, key, trail),
             {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": re.sub(r"\[(.+?)\]\(([a-z\-]+)\)", r"\1", a)}} for q, a in d["faq"]]},
         ]
@@ -496,7 +493,7 @@ open(os.path.join(ROOT, "robots.txt"), "w", encoding="utf-8", newline="\n").writ
 
 llms = f"""# {SITE['name']}
 
-> Owner-operated landscaping company serving Phoenixville and Chester County, Pennsylvania. Lawn care, landscape design, hardscaping, retaining walls, drainage and grading, sod and seeding, seasonal cleanup, tree work and snow removal. Free estimates. Phone: {SITE['phone_display']}.
+> Owner-operated landscaping company serving Royersford and Chester County, Pennsylvania. Lawn care, landscape design, hardscaping, retaining walls, drainage and grading, sod and seeding, seasonal cleanup, tree work and snow removal. Free estimates. Phone: {SITE['phone_display']}.
 
 ## Pages
 """ + "\n".join(f"- [{SVC[s]['en']['name']}]({URL}/{s}.html): {SVC[s]['en']['desc']}" for s in SLUGS) + f"""

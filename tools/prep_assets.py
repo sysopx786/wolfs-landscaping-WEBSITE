@@ -68,9 +68,9 @@ def og():
     sans = ["segoeui.ttf", "arial.ttf"]
     d.rounded_rectangle([80, 90, 160, 170], radius=18, fill="#f4efe4")
     d.polygon([(120, 105), (145, 135), (145, 148), (120, 160), (95, 148), (95, 135)], fill="#2f5d3a")
-    d.text((80, 230), "Wolf's Landscaping Services", font=font(serif, 76), fill="#ffffff")
+    d.text((80, 230), "Wolf's Landscaping Services", font=font(serif, 68), fill="#ffffff")
     d.text((80, 340), "Lawn care, hardscaping, retaining walls", font=font(sans, 40), fill="#e3ead9")
-    d.text((80, 400), "Phoenixville & Chester County, PA", font=font(sans, 40), fill="#f1d9a8")
+    d.text((80, 400), "Royersford & Chester County, PA", font=font(sans, 40), fill="#f1d9a8")
     d.rounded_rectangle([80, 500, 470, 565], radius=32, fill="#a8651a")
     d.text((110, 513), "Free estimates", font=font(sans, 36), fill="#ffffff")
     im.save(os.path.join(ROOT, "og-image.jpg"), "JPEG", quality=86, optimize=True)
