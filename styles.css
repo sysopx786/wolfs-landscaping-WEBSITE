@@ -331,3 +331,7 @@ address{font-style:normal}
 .visit-links{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 28px}
 .owner-name{font-size:1.25rem;margin:0}
 .owner-name .role{color:var(--stone);font-weight:400}
+
+/* two-column checklist inside long service sections */
+.checks.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 28px;margin:0 0 1.2em}
+@media (max-width:640px){.checks.cols{grid-template-columns:1fr}}

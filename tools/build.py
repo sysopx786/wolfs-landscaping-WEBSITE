@@ -361,12 +361,22 @@ def build_lang(lang):
         inc = "".join(f"<li>{e(i)}</li>" for i in d["includes"])
         how = "".join(f'<div class="card"><h3>{e(h)}</h3><p>{e(t)}</p></div>' for h, t in d["how"])
         rel = "".join(f'<a class="rel" href="{r}.html">{e(SVC[r][lang]["name"])}</a>' for s2 in [s] for r in s2["related"])
+        extra = ""
+        for i, (h, paras, bullets, closing) in enumerate(d.get("extra", [])):
+            ul = f'<ul class="checks cols">{"".join(f"<li>{e(x)}</li>" for x in bullets)}</ul>' if bullets else ""
+            tail = f"<p>{e(closing)}</p>" if closing else ""
+            cls = "section alt" if i % 2 == 0 else "section"
+            extra += f'<section class="{cls}"><div class="wrap narrow prose"><h2>{e(h)}</h2>{"".join(f"<p>{e(p)}</p>" for p in paras)}{ul}{tail}</div></section>'
+        after = ""
+        if d.get("aftercare"):
+            cards = "".join(f'<div class="card"><h3>{e(h)}</h3><p>{e(t)}</p></div>' for h, t in d["aftercare"])
+            after = f'<section class="section"><div class="wrap"><div class="grid cards">{cards}</div></div></section>'
         body = f"""{hero(lang, trail, d['name'], d['tag'])}
 <section class="section"><div class="wrap two">
   <div class="prose">{''.join(f'<p>{e(p)}</p>' for p in d['intro'])}</div>
   <div class="callout"><h2 class="h3">{e(ui['included'])}</h2><ul class="checks">{inc}</ul></div>
 </div></section>
-<section class="section alt"><div class="wrap"><h2>{e(ui['how_we_work'])}</h2><div class="grid cards">{how}</div></div></section>
+{extra}{after}<section class="section alt"><div class="wrap"><h2>{e(ui['how_we_work'])}</h2><div class="grid cards">{how}</div></div></section>
 <section class="section"><div class="wrap narrow"><h2>{e(ui['common_q'])}</h2>{faq_html(d['faq'])}
 <p class="more"><a href="faq.html">{e(ui['more_q'])} &rarr;</a></p></div></section>
 <section class="section cta-band"><div class="wrap center"><h2>{e(ui['cta_title'])}</h2><p>{e(ui['cta_text'])}</p>
@@ -514,7 +524,7 @@ open(os.path.join(ROOT, "robots.txt"), "w", encoding="utf-8", newline="\n").writ
 
 llms = f"""# {SITE['name']}
 
-> Owner-operated landscaping company serving Royersford and Chester County, Pennsylvania. Lawn care, landscape design, hardscaping, retaining walls, drainage and grading, sod and seeding, seasonal cleanup, tree work and snow removal. Free estimates. Phone: {SITE['phone_display']}.
+> Owner-operated landscaping company serving Royersford and Chester County, Pennsylvania. Lawn care, landscape design, hardscaping, retaining walls, drainage and grading, aeration, sod and seeding, seasonal cleanup, tree work and snow removal. Free estimates. Phone: {SITE['phone_display']}.
 
 ## Pages
 """ + "\n".join(f"- [{SVC[s]['en']['name']}]({URL}/{s}.html): {SVC[s]['en']['desc']}" for s in SLUGS) + f"""
