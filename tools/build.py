@@ -40,6 +40,11 @@ def g_icon(lang, cls="g-logo", size=24, alt=""):
     return f'<img class="{cls}" src="{asset(lang)}brand/google-g.png" alt="{e(alt)}" width="{size}" height="{size}" decoding="async">'
 
 
+# Material "call" handset icon (Apache 2.0)
+PHONE_ICON = ('<svg class="ico-phone" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">'
+              '<path fill="currentColor" d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z"/></svg>')
+
+
 def rating_link(lang):
     """Stars + rating + 'Reviews from Google (N)' as a single link to the on-site Reviews page."""
     ui = C.UI[lang]
@@ -304,7 +309,7 @@ def build_lang(lang):
     <p class="hero-rating">{rating_link(lang)}</p>
     <div class="cta-row">
       <a class="btn" href="contact.html#estimate">{e(ui['cta_btn'])}</a>
-      <a class="btn btn-ghost" href="tel:{SITE['phone_tel']}">{e(ui['call'])} {SITE['phone_display']}</a>
+      <a class="btn btn-ghost btn-call" href="tel:{SITE['phone_tel']}" aria-label="{e(ui['call'])} {SITE['phone_display']}">{PHONE_ICON}<span class="call-text">{e(ui['call'])} {SITE['phone_display']}</span></a>
     </div>
     <p class="hero-review-cta"><a class="btn btn-small" href="{C.SITE['google_write_review_url']}" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(ui['write_btn'])}</a></p>
     <ul class="proof">{proof}</ul>
