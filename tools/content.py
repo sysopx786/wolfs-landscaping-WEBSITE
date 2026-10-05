@@ -8,6 +8,7 @@ SITE = dict(
     name="Wolf's Landscaping Services",
     phone_display="610-357-1098",
     phone_tel="+16103571098",
+    google_reviews_url="https://www.google.com/maps?cid=2486202383414944340",  # Google Business Profile: Wolf's Landscaping Services
     areas=["Phoenixville, PA", "Chester County, PA"],
 )
 

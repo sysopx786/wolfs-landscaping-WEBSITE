@@ -317,7 +317,7 @@ def build_lang(lang):
   <p class="sub google-line">{g_icon(lang, "g-logo", 24)}<span class="stars" aria-hidden="true">★★★★★</span> <strong>4.7</strong> <span class="sr-only">{e(ui['rating_sr'])}</span> <span class="google-label">{e(ui['google_label'])} (15)</span></p>
   {orig}
   <div class="grid quotes">{quotes}</div>
-  <p class="center"><a class="btn btn-ghost dark" href="https://www.google.com/maps/search/?api=1&amp;query=Wolf%27s+Landscaping+Services+Phoenixville+PA" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(ui['google_btn'])}</a></p>
+  <p class="center"><a class="btn btn-ghost dark" href="{C.SITE['google_reviews_url']}" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(ui['google_btn'])}</a></p>
 </div></section>
 <section id="areas" class="section"><div class="wrap two">
   <div><h2>{e(P['area_h'])}</h2><p>{e(P['area_p'])}</p><ul class="towns">{towns}</ul></div>
