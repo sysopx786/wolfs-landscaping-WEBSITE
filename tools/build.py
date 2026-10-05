@@ -307,6 +307,8 @@ def build_lang(lang):
     orig = f'<p class="sub">{e(ui["reviews_orig"])}</p>' if ui["reviews_orig"] else ""
     towns = "".join(f"<li>{e(t)}</li>" for t in C.TOWNS)
     why = "".join(f"<li>{e(w)}</li>" for w in P["why"])
+    SHOT = {s["key"]: s for s in C.SHOTS}
+    home_shots = "".join(slider(lang, SHOT[k]) for k in ("patio", "lighting", "lawn", "walkway"))
     home = f"""<section class="hero">
   <div class="wrap hero-inner">
     <p class="eyebrow">{e(P['eyebrow'])}</p>
@@ -329,7 +331,7 @@ def build_lang(lang):
 <section id="work" class="section alt"><div class="wrap">
   <h2>{e(P['work_h'])}</h2>
   <p class="sub">{e(ui['slider_hint'])}</p>
-  <div class="ba-single">{slider(lang, C.SHOTS[0])}</div>
+  <div class="ba-grid">{home_shots}</div>
   <p class="center"><a class="btn btn-ghost dark" href="gallery.html">{e(ui['see_more_ba'])}</a></p>
 </div></section>
 <section id="process" class="section"><div class="wrap">
