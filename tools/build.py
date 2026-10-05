@@ -368,7 +368,8 @@ def build_lang(lang):
         link = (f' <a class="review-link" href="{e(r["url"])}" target="_blank" rel="noopener">{e(ui["view_on_google"])} &rarr;</a>' if r.get("url") else "")
         return (f'<article class="review"><header>{g_icon(lang, "g-mini", 18)}<strong>{who}</strong>'
                 f'<span class="stars" aria-hidden="true">{"★" * int(r["stars"])}</span><span class="sr-only">{r["stars"]} / 5</span>'
-                f'<span class="when">{e(r["when"])}</span></header><p>{e(r["text"])}</p>{link}</article>')
+                + (f'<span class="when">{e(r["when"])}</span>' if r.get("when") else "")
+                + "</header>" + (f'<p>{e(r["text"])}</p>' if r.get("text") else "") + f'{link}</article>')
     n_listed, total = len(C.ALL_REVIEWS), int(C.REVIEWS_META["count"])
     partial = (f'<p class="notice">{e(P["reviews_partial"].format(n=n_listed, total=total))} '
                f'<a href="{C.SITE["google_reviews_url"]}" target="_blank" rel="noopener">{e(ui["google_btn"])}</a></p>') if n_listed < total else ""
