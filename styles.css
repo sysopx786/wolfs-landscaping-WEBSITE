@@ -274,3 +274,12 @@ nav{gap:13px}
 .review-link{font-weight:600;color:var(--green);text-decoration:underline;text-underline-offset:3px;display:inline-block;padding:10px 0}
 .btn-row.left{justify-content:flex-start;margin:18px 0 8px}
 .review-note{margin:24px 0 0;font-size:.9rem}
+
+/* slim reviews bar under the home page hero */
+.review-bar{background:#fff;border-bottom:1px solid #e5e5df;padding:14px 0}
+.review-bar .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px}
+.review-bar p{margin:0}
+.review-bar .google-line{font-weight:500}
+.review-bar .btn-row{justify-content:flex-start}
+.review-bar .btn-small{padding:8px 18px}
+@media (max-width:640px){.review-bar .wrap{flex-direction:column;align-items:flex-start}}

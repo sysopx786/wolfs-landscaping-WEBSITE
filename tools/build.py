@@ -303,6 +303,10 @@ def build_lang(lang):
   </div>
 </section>
 <section class="trust-strip" aria-label="{e(ui['nav_reviews'])}"><div class="wrap">{trust}</div></section>
+<section class="review-bar" aria-label="{e(ui['google_label'])}"><div class="wrap">
+  <p class="google-line">{g_icon(lang, "g-logo", 24)}<span class="stars" aria-hidden="true">★★★★★</span> <strong>{C.REVIEWS_META["rating"]}</strong> <span class="sr-only">{e(ui['rating_sr'])}</span> <span class="google-label">{e(ui['google_label'])} ({C.REVIEWS_META['count']})</span></p>
+  <p class="btn-row"><a class="btn btn-small" href="{C.SITE['google_write_review_url']}" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(ui['write_btn'])}</a> <a class="btn btn-ghost dark btn-small" href="reviews.html">{e(ui['see_all'])}</a></p>
+</div></section>
 <section id="services" class="section"><div class="wrap">
   <h2>{e(P['services_h'])}</h2><p class="sub">{e(P['services_sub'])}</p>
   <div class="grid cards">{cards}</div>
