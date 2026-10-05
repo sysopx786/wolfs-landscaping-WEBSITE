@@ -12,6 +12,7 @@
 - [Seasonal Cleanup](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/seasonal-cleanup.html): Spring and fall yard cleanup and leaf collection in Phoenixville and Chester County. We haul it away.
 - [Tree Work & Snow Removal](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/tree-snow.html): Tree work and snow removal in Phoenixville and Chester County. Local, owner-operated and responsive.
 - [About](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/about.html)
+- [Customer reviews](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/reviews.html): reviews from the Google listing
 - [FAQ](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/faq.html)
 - [Contact and free estimate](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/contact.html)
 - [Gallery](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/gallery.html): before and after comparisons for retaining walls, walkways, patios, driveways, garden beds and lawns

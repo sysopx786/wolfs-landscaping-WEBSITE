@@ -1,0 +1,39 @@
+{
+  "_note": "Customer reviews shown on the Reviews page. Source: the business's public Google listing, read 2026-10-05. To add a review, add an entry here (reviewer shown as first name + last initial) and run: python tools/build.py. 'url' is the review's own Google share link (optional). 'featured' reviews also appear on the home page ('excerpt' overrides the text there).",
+  "meta": {
+    "retrieved": "2026-10-05",
+    "rating": "5.0",
+    "count": 14
+  },
+  "reviews": [
+    {
+      "reviewer": "Arturo V.",
+      "stars": 5,
+      "when": "2 months ago",
+      "text": "Extremely professional company. Had them do a landscaping design and install for us & it came out great. We’re going to have them come back and do some tree removal for us too. Highly recommend",
+      "url": "https://share.google/GmbW3kIUh0mLmZF7J",
+      "featured": true,
+      "service": {"en": "Landscape design & installation", "es": "Diseño e instalación de paisajes"}
+    },
+    {
+      "reviewer": null,
+      "stars": 5,
+      "when": "2 months ago",
+      "text": "Brian and his team do incredible work. He does our business lawn and if it doesn’t need it, he tells me he pushes off to save money. On the flip side when the lawn needs to be cut he is there before I even need to ask him. I would recommend this service to anyone. He is thorough and cost effective and does beautiful work!!",
+      "excerpt": "…when the lawn needs to be cut he is there before I even need to ask him. I would recommend this service to anyone. He is thorough and cost effective and does beautiful work!!",
+      "url": null,
+      "featured": true,
+      "service": {"en": "Lawn care", "es": "Cuidado del césped"}
+    },
+    {
+      "reviewer": null,
+      "stars": 5,
+      "when": "2 weeks ago",
+      "text": "Bryan and his team are amazing! Everyone is extremely friendly and my yard looks perfect.. I was in a pinch and needed my lawn done before I went away for a work trip and Bryan had someone out asap. They went above and beyond. Will be using them for all of my Landscaping and treework needs, would give them six stars if I could!",
+      "excerpt": "Everyone is extremely friendly and my yard looks perfect… They went above and beyond. Will be using them for all of my Landscaping and treework needs, would give them six stars if I could!",
+      "url": null,
+      "featured": true,
+      "service": {"en": "Lawn care & tree work", "es": "Césped y trabajo con árboles"}
+    }
+  ]
+}

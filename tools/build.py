@@ -122,7 +122,7 @@ def header(lang, key):
       <div class="dd"><a href="index.html#services">{e(ui['nav_services'])}</a><button class="dd-toggle" type="button" aria-expanded="false" aria-label="{e(ui['services_menu'])}"></button><ul class="dd-list">{items}</ul></div>
       <a href="about.html"{cur('about')}>{e(ui['nav_about'])}</a>
       <a href="gallery.html"{cur('gallery')}>{e(ui['nav_gallery'])}</a>
-      <a href="index.html#reviews">{e(ui['nav_reviews'])}</a>
+      <a href="reviews.html"{cur('reviews')}>{e(ui['nav_reviews'])}</a>
       <a href="faq.html"{cur('faq')}>{e(ui['nav_faq'])}</a>
       <a href="contact.html"{cur('contact')}>{e(ui['nav_contact'])}</a>
       <a class="btn btn-small" href="contact.html#estimate">{e(ui['nav_estimate'])}</a>
@@ -276,12 +276,17 @@ def build_lang(lang):
         f'<article class="card"><h3><a href="{k}.html">{e(n)}</a></h3><p>{e(d)}</p><ul>' + "".join(f"<li>{e(i)}</li>" for i in items) + f'</ul><p class="more"><a href="{k}.html">{e(ui["about"])} {e(n.lower())} &rarr;</a></p></article>'
         for k, n, d, items in P["cards"])
     proof = "".join(
-        (f'<li>{g_icon(lang, "g-mini", 18)}<strong>{C.SITE["rating"]} <span class="stars" aria-hidden="true">★</span></strong> {e(b)}</li>' if i == 0
+        (f'<li>{g_icon(lang, "g-mini", 18)}<strong>{C.REVIEWS_META["rating"]} <span class="stars" aria-hidden="true">★</span></strong> {e(b)}</li>' if i == 0
+         else f"<li><strong>{C.REVIEWS_META['count']}</strong> {e(b)}</li>" if i == 1
          else f"<li><strong>{e(a)}</strong> {e(b)}</li>")
         for i, (a, b) in enumerate(P["proof"]))
     trust = "".join(f"<span>{e(t)}</span>" for t in P["trust"])
     steps = "".join(f'<li><span>{i + 1}</span><h3>{e(h)}</h3><p>{e(t)}</p></li>' for i, (h, t) in enumerate(P["steps"]))
-    quotes = "".join(f'<blockquote><p>“{e(q)}”</p><cite>{g_icon(lang, "g-mini", 16)}{e(n[lang])} &middot; {e(s[lang])}</cite></blockquote>' for q, n, s in C.REVIEWS)
+    def cite_of(r):
+        who = e(r["reviewer"] or ui["anon_reviewer"])
+        svc = (r.get("service") or {}).get(lang)
+        return g_icon(lang, "g-mini", 16) + who + (f" &middot; {e(svc)}" if svc else "")
+    quotes = "".join(f'<blockquote><p>“{e(r.get("excerpt") or r["text"])}”</p><cite>{cite_of(r)}</cite></blockquote>' for r in C.FEATURED)
     orig = f'<p class="sub">{e(ui["reviews_orig"])}</p>' if ui["reviews_orig"] else ""
     towns = "".join(f"<li>{e(t)}</li>" for t in C.TOWNS)
     why = "".join(f"<li>{e(w)}</li>" for w in P["why"])
@@ -314,10 +319,10 @@ def build_lang(lang):
 </div></section>
 <section id="reviews" class="section alt"><div class="wrap">
   <h2>{e(P['reviews_h'])}</h2>
-  <p class="sub google-line">{g_icon(lang, "g-logo", 24)}<span class="stars" aria-hidden="true">★★★★★</span> <strong>{C.SITE["rating"]}</strong> <span class="sr-only">{e(ui['rating_sr'])}</span> <span class="google-label">{e(ui['google_label'])} ({C.SITE['review_count']})</span></p>
+  <p class="sub google-line">{g_icon(lang, "g-logo", 24)}<span class="stars" aria-hidden="true">★★★★★</span> <strong>{C.REVIEWS_META["rating"]}</strong> <span class="sr-only">{e(ui['rating_sr'])}</span> <span class="google-label">{e(ui['google_label'])} ({C.REVIEWS_META['count']})</span></p>
   {orig}
   <div class="grid quotes">{quotes}</div>
-  <p class="center btn-row"><a class="btn" href="{C.SITE['google_write_review_url']}" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(ui['write_btn'])}</a> <a class="btn btn-ghost dark" href="{C.SITE['google_reviews_url']}" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(ui['google_btn'])}</a></p>
+  <p class="center btn-row"><a class="btn" href="{C.SITE['google_write_review_url']}" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(ui['write_btn'])}</a> <a class="btn btn-ghost dark" href="reviews.html">{e(ui['see_all'])}</a></p>
 </div></section>
 <section id="areas" class="section"><div class="wrap two">
   <div><h2>{e(P['area_h'])}</h2><p>{e(P['area_p'])}</p><ul class="towns">{towns}</ul></div>
@@ -355,6 +360,27 @@ def build_lang(lang):
             {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": re.sub(r"\[(.+?)\]\(([a-z\-]+)\)", r"\1", a)}} for q, a in d["faq"]]},
         ]
         page(lang, key, d["title"], d["desc"], body, graph)
+
+    # ---- reviews
+    trail = [(ui["nav_reviews"], "reviews.html")]
+    def review_card(r):
+        who = e(r["reviewer"] or ui["anon_reviewer"])
+        link = (f' <a class="review-link" href="{e(r["url"])}" target="_blank" rel="noopener">{e(ui["view_on_google"])} &rarr;</a>' if r.get("url") else "")
+        return (f'<article class="review"><header>{g_icon(lang, "g-mini", 18)}<strong>{who}</strong>'
+                f'<span class="stars" aria-hidden="true">{"★" * int(r["stars"])}</span><span class="sr-only">{r["stars"]} / 5</span>'
+                f'<span class="when">{e(r["when"])}</span></header><p>{e(r["text"])}</p>{link}</article>')
+    n_listed, total = len(C.ALL_REVIEWS), int(C.REVIEWS_META["count"])
+    partial = (f'<p class="notice">{e(P["reviews_partial"].format(n=n_listed, total=total))} '
+               f'<a href="{C.SITE["google_reviews_url"]}" target="_blank" rel="noopener">{e(ui["google_btn"])}</a></p>') if n_listed < total else ""
+    body = f"""{hero(lang, trail, P['rpage_h'], P['reviews_lead'], show_cta=False)}
+<section class="section"><div class="wrap">
+<p class="sub google-line">{g_icon(lang, "g-logo", 24)}<span class="stars" aria-hidden="true">★★★★★</span> <strong>{C.REVIEWS_META["rating"]}</strong> <span class="sr-only">{e(ui['rating_sr'])}</span> <span class="google-label">{e(ui['google_label'])} ({total})</span></p>
+<p class="btn-row left"><a class="btn" href="{C.SITE['google_write_review_url']}" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(ui['write_btn'])}</a> <a class="btn btn-ghost dark" href="{C.SITE['google_reviews_url']}" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(ui['google_btn'])}</a></p>
+{partial}
+<div class="reviews-grid">{"".join(review_card(r) for r in C.ALL_REVIEWS)}</div>
+<p class="sub review-note">{e(P['reviews_note'])}</p>
+</div></section>"""
+    page(lang, "reviews", P["reviews_title"], P["reviews_desc"], body, [crumb_ld(lang, "reviews", trail)])
 
     # ---- about
     trail = [(ui["nav_about"], "about.html")]
@@ -425,7 +451,7 @@ for lg in LANGS:
     build_lang(lg)
 
 # ------------------------------------------------------------------ crawl files
-KEYS = ["index"] + SLUGS + ["about", "gallery", "faq", "contact", "privacy"]
+KEYS = ["index"] + SLUGS + ["about", "reviews", "gallery", "faq", "contact", "privacy"]
 sm = ['<?xml version="1.0" encoding="UTF-8"?>',
       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
 for lg in LANGS:
@@ -470,6 +496,7 @@ llms = f"""# {SITE['name']}
 ## Pages
 """ + "\n".join(f"- [{SVC[s]['en']['name']}]({URL}/{s}.html): {SVC[s]['en']['desc']}" for s in SLUGS) + f"""
 - [About]({URL}/about.html)
+- [Customer reviews]({URL}/reviews.html): reviews from the Google listing
 - [FAQ]({URL}/faq.html)
 - [Contact and free estimate]({URL}/contact.html)
 - [Gallery]({URL}/gallery.html): before and after comparisons for retaining walls, walkways, patios, driveways, garden beds and lawns

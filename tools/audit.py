@@ -101,7 +101,7 @@ def main():
             if l.startswith("mailto:") or "@" in l: add(f"{f}: email link {l}")
             if l.startswith(("tel:", "sms:")): continue
             if l.startswith("http"):
-                if urlparse(l).netloc not in ("www.google.com", "search.google.com"): add(f"{f}: unexpected external link {l}")
+                if urlparse(l).netloc not in ("www.google.com", "search.google.com", "share.google"): add(f"{f}: unexpected external link {l}")
                 continue
             path, _, frag = l.partition("#")
             tgt = os.path.normpath(os.path.join(d, path)).replace("\\", "/") if path else f

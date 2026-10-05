@@ -8,7 +8,6 @@ SITE = dict(
     name="Wolf's Landscaping Services",
     phone_display="610-357-1098",
     phone_tel="+16103571098",
-    rating="5.0", review_count=14,   # read from the live Google listing on 2026-10-05
     google_write_review_url="https://search.google.com/local/writereview?placeid=ChIJ0VPVILEDmSgRVGItL-XDgCI",  # opens the review box (Google asks visitors to sign in first)
     google_reviews_url="https://www.google.com/maps?cid=2486202383414944340",  # Google Business Profile: Wolf's Landscaping Services
     areas=["Phoenixville, PA", "Chester County, PA"],
@@ -40,7 +39,7 @@ UI = {
     privacy="Privacy", back_top="Back to top", before="Before", after="After",
     slider_hint="Drag the handle, or use the arrow keys, to compare each before and after.",
     gallery_cta="Want something like this?", see_more_ba="See more before & afters",
-    google_label="Reviews from Google", rating_sr="Rated 5.0 out of 5 stars on Google", google_btn="Read all reviews on Google", write_btn="Leave a review on Google",
+    google_label="Reviews from Google", rating_sr="Rated 5.0 out of 5 stars on Google", google_btn="Read all reviews on Google", write_btn="Leave a review on Google", see_all="See all reviews", anon_reviewer="Google review", view_on_google="View on Google",
     reviews_orig="",
     sticky_call="Call Now",
  ),
@@ -56,7 +55,7 @@ UI = {
     privacy="Privacidad", back_top="Volver arriba", before="Antes", after="Después",
     slider_hint="Arrastre el control, o use las flechas del teclado, para comparar el antes y el después.",
     gallery_cta="¿Quiere algo así?", see_more_ba="Ver más antes y después",
-    google_label="Reseñas de Google", rating_sr="Calificación de 5.0 sobre 5 estrellas en Google", google_btn="Leer todas las reseñas en Google", write_btn="Dejar una reseña en Google",
+    google_label="Reseñas de Google", rating_sr="Calificación de 5.0 sobre 5 estrellas en Google", google_btn="Leer todas las reseñas en Google", write_btn="Dejar una reseña en Google", see_all="Ver todas las reseñas", anon_reviewer="Reseña de Google", view_on_google="Ver en Google",
     reviews_orig="Reseñas originales en inglés, tal como las escribieron nuestros clientes.",
     sticky_call="Llamar ahora",
  ),
@@ -314,14 +313,11 @@ SHOTS = [
 ]
 
 # ---------------------------------------------------------------- reviews (English originals)
-REVIEWS = [
- ("Extremely professional company. Had them do a landscaping design and install for us & it came out great. We’re going to have them come back and do some tree removal for us too. Highly recommend",
-  {"en": "Google review", "es": "Reseña de Google"}, {"en": "Landscape design & installation", "es": "Diseño e instalación de paisajes"}),
- ("…when the lawn needs to be cut he is there before I even need to ask him. I would recommend this service to anyone. He is thorough and cost effective and does beautiful work!!",
-  {"en": "Google review", "es": "Reseña de Google"}, {"en": "Lawn care", "es": "Cuidado del césped"}),
- ("Everyone is extremely friendly and my yard looks perfect… They went above and beyond. Will be using them for all of my Landscaping and treework needs, would give them six stars if I could!",
-  {"en": "Google review", "es": "Reseña de Google"}, {"en": "Lawn care & tree work", "es": "Césped y trabajo con árboles"}),
-]
+import json as _json, os as _os
+_RV = _json.load(open(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "reviews.json"), encoding="utf-8"))
+REVIEWS_META = _RV["meta"]
+ALL_REVIEWS = _RV["reviews"]                        # every review, shown on the Reviews page
+FEATURED = [r for r in ALL_REVIEWS if r.get("featured")]   # shown on the home page
 
 # ---------------------------------------------------------------- general FAQ
 FAQ_GEN = {
@@ -387,6 +383,12 @@ PAGES = {
   gallery_h="Gallery",
   faq_title="FAQ", faq_desc="Answers about estimates, service area, scheduling and services from Wolf's Landscaping Services in Phoenixville, PA.", faq_h="Frequently asked questions",
   faq_foot="Still have a question?", faq_foot_link="Send us a request",
+  reviews_title="Customer Reviews",
+  reviews_desc="What customers say about Wolf's Landscaping Services in Phoenixville and Chester County, PA, from the business's Google reviews.",
+  rpage_h="Customer reviews",
+  reviews_lead="What our customers say on Google.",
+  reviews_note="Reviews are copied from our Google listing as of October 5, 2026. Times are shown the way Google displayed them that day.",
+  reviews_partial="Showing {n} of {total} reviews.",
   about_title="About Us: Owner-Operated Landscaping in Phoenixville, PA",
   about_desc="Wolf's Landscaping Services is an owner-operated landscaping company in Phoenixville and Chester County, PA. Learn how we work and what customers say.",
   about_h="About Wolf's Landscaping Services",
@@ -455,6 +457,12 @@ PAGES = {
   gallery_h="Galería",
   faq_title="Preguntas frecuentes", faq_desc="Respuestas sobre cotizaciones, área de servicio, horarios y servicios de Wolf's Landscaping Services en Phoenixville, PA.", faq_h="Preguntas frecuentes",
   faq_foot="¿Todavía tiene una pregunta?", faq_foot_link="Envíenos una solicitud",
+  reviews_title="Reseñas de clientes",
+  reviews_desc="Lo que dicen los clientes de Wolf's Landscaping Services en Phoenixville y el condado de Chester, PA, según las reseñas de Google del negocio.",
+  rpage_h="Reseñas de clientes",
+  reviews_lead="Lo que dicen nuestros clientes en Google.",
+  reviews_note="Las reseñas se copiaron de nuestro perfil de Google al 5 de octubre de 2026, en inglés tal como las escribieron los clientes. Los tiempos se muestran como Google los mostró ese día.",
+  reviews_partial="Mostrando {n} de {total} reseñas.",
   about_title="Nosotros: paisajismo con el dueño al frente en Phoenixville, PA",
   about_desc="Wolf's Landscaping Services es una empresa de paisajismo con el dueño al frente en Phoenixville y el condado de Chester, PA. Conozca cómo trabajamos y qué dicen nuestros clientes.",
   about_h="Sobre Wolf's Landscaping Services",
