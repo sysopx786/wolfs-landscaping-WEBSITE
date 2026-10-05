@@ -376,7 +376,6 @@ def build_lang(lang):
     shots = "".join(slider(lang, s) for s in C.SHOTS)
     body = f"""{hero(lang, trail, P['gallery_h'], ui['slider_hint'], show_cta=False)}
 <section class="section"><div class="wrap">
-<p class="notice"><strong>{e(ui['gallery_notice'])}</strong> {e(ui['ai_note'])}</p>
 <div class="ba-grid">{shots}</div>
 <p class="more">{e(ui['gallery_cta'])} <a href="contact.html#estimate">{e(ui['cta_btn'])}</a> &middot; <a href="tel:{SITE['phone_tel']}">{SITE['phone_display']}</a></p>
 </div></section>"""
