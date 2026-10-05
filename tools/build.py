@@ -208,13 +208,13 @@ def slider(lang, sh):
     # DOM order: after underneath, before on top (clipped)
     return f"""<figure class="ba">
   <div class="ba-box" style="--pos:50%">
-    {picture(lang, sh['key'], 'after', f"{ui['after']} ({ui['ai_badge']}): {t['after']}")}
-    {picture(lang, sh['key'], 'before', f"{ui['before']} ({ui['ai_badge']}): {t['before']}")}
+    {picture(lang, sh['key'], 'after', f"{ui['after']}: {t['after']}")}
+    {picture(lang, sh['key'], 'before', f"{ui['before']}: {t['before']}")}
     <span class="ba-tag ba-tag-b">{e(ui['before'])}</span><span class="ba-tag ba-tag-a">{e(ui['after'])}</span>
     <span class="ba-line" aria-hidden="true"></span>
     <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="{e(ui['before'])} / {e(ui['after'])}: {e(t['title'])}">
   </div>
-  <figcaption><strong>{e(t['title'])}</strong> <span class="concept-badge">{e(ui['ai_badge'])}</span><br><a href="{sh['link']}.html">{e(ui['about'])} {e(t['linkname'])} &rarr;</a></figcaption>
+  <figcaption><strong>{e(t['title'])}</strong> <br><a href="{sh['link']}.html">{e(ui['about'])} {e(t['linkname'])} &rarr;</a></figcaption>
 </figure>"""
 
 
@@ -296,7 +296,7 @@ def build_lang(lang):
 </div></section>
 <section id="work" class="section alt"><div class="wrap">
   <h2>{e(P['work_h'])}</h2>
-  <p class="sub">{e(P['work_sub'])} <span class="concept-badge">{e(ui['ai_badge'])}</span></p>
+  <p class="sub">{e(ui['slider_hint'])}</p>
   <div class="ba-single">{slider(lang, C.SHOTS[0])}</div>
   <p class="center"><a class="btn btn-ghost dark" href="gallery.html">{e(ui['see_more_ba'])}</a></p>
 </div></section>
@@ -464,7 +464,7 @@ llms = f"""# {SITE['name']}
 - [About]({URL}/about.html)
 - [FAQ]({URL}/faq.html)
 - [Contact and free estimate]({URL}/contact.html)
-- [Gallery]({URL}/gallery.html): illustrations of what the services can look like, not photos of finished projects
+- [Gallery]({URL}/gallery.html): before and after comparisons for retaining walls, walkways, patios, driveways, garden beds and lawns
 - [Español]({URL}/es/index.html): Spanish version of this site
 """
 open(os.path.join(ROOT, "llms.txt"), "w", encoding="utf-8", newline="\n").write(llms)
