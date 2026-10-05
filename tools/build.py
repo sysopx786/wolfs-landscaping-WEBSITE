@@ -35,6 +35,11 @@ def asset(lang):
     return "../" if lang == "es" else ""
 
 
+def g_icon(lang, cls="g-logo", size=24, alt=""):
+    """Official Google 'G' (unaltered file from Google). Decorative by default (alt empty) when text next to it names Google."""
+    return f'<img class="{cls}" src="{asset(lang)}brand/google-g.png" alt="{e(alt)}" width="{size}" height="{size}" decoding="async">'
+
+
 def pub_url(lang, key):
     return f"{URL}/{prefix(lang)}{fname(key)}"
 
@@ -270,10 +275,13 @@ def build_lang(lang):
     cards = "".join(
         f'<article class="card"><h3><a href="{k}.html">{e(n)}</a></h3><p>{e(d)}</p><ul>' + "".join(f"<li>{e(i)}</li>" for i in items) + f'</ul><p class="more"><a href="{k}.html">{e(ui["about"])} {e(n.lower())} &rarr;</a></p></article>'
         for k, n, d, items in P["cards"])
-    proof = "".join(f"<li><strong>{e(a)}</strong> {e(b)}</li>" for a, b in P["proof"])
+    proof = "".join(
+        (f'<li>{g_icon(lang, "g-mini", 18)}<strong>4.7 <span class="stars" aria-hidden="true">★</span></strong> {e(b)}</li>' if i == 0
+         else f"<li><strong>{e(a)}</strong> {e(b)}</li>")
+        for i, (a, b) in enumerate(P["proof"]))
     trust = "".join(f"<span>{e(t)}</span>" for t in P["trust"])
     steps = "".join(f'<li><span>{i + 1}</span><h3>{e(h)}</h3><p>{e(t)}</p></li>' for i, (h, t) in enumerate(P["steps"]))
-    quotes = "".join(f'<blockquote><p>“{e(q)}”</p><cite>{e(n)} &middot; {e(s[lang])}</cite></blockquote>' for q, n, s in C.REVIEWS)
+    quotes = "".join(f'<blockquote><p>“{e(q)}”</p><cite>{g_icon(lang, "g-mini", 16)}{e(n)} &middot; {e(s[lang])}</cite></blockquote>' for q, n, s in C.REVIEWS)
     orig = f'<p class="sub">{e(ui["reviews_orig"])}</p>' if ui["reviews_orig"] else ""
     towns = "".join(f"<li>{e(t)}</li>" for t in C.TOWNS)
     why = "".join(f"<li>{e(w)}</li>" for w in P["why"])
@@ -306,10 +314,10 @@ def build_lang(lang):
 </div></section>
 <section id="reviews" class="section alt"><div class="wrap">
   <h2>{e(P['reviews_h'])}</h2>
-  <p class="sub"><strong>4.7 ★</strong> &middot; {e(ui['google_label'])}</p>
+  <p class="sub google-line">{g_icon(lang, "g-logo", 24)}<span class="stars" aria-hidden="true">★★★★★</span> <strong>4.7</strong> <span class="sr-only">{e(ui['rating_sr'])}</span> <span class="google-label">{e(ui['google_label'])} (15)</span></p>
   {orig}
   <div class="grid quotes">{quotes}</div>
-  <p class="center"><a class="btn btn-ghost dark" href="https://www.google.com/maps/search/?api=1&amp;query=Wolf%27s+Landscaping+Services+Phoenixville+PA" target="_blank" rel="noopener">{e(ui['google_btn'])}</a></p>
+  <p class="center"><a class="btn btn-ghost dark" href="https://www.google.com/maps/search/?api=1&amp;query=Wolf%27s+Landscaping+Services+Phoenixville+PA" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(ui['google_btn'])}</a></p>
 </div></section>
 <section id="areas" class="section"><div class="wrap two">
   <div><h2>{e(P['area_h'])}</h2><p>{e(P['area_p'])}</p><ul class="towns">{towns}</ul></div>
@@ -352,7 +360,7 @@ def build_lang(lang):
     trail = [(ui["nav_about"], "about.html")]
     who = "".join(f"<p>{e(p)}</p>" for p in P["about_who"])
     values = "".join(f'<div class="card"><h3>{e(h)}</h3><p>{e(t)}</p></div>' for h, t in P["about_values"])
-    quotes = "".join(f'<blockquote><p>“{e(q)}”</p><cite>{e(n)}</cite></blockquote>' for q, n in P["about_quotes"])
+    quotes = "".join(f'<blockquote><p>“{e(q)}”</p><cite>{g_icon(lang, "g-mini", 16)}{e(n)}</cite></blockquote>' for q, n in P["about_quotes"])
     owner_html = ""
     if C.OWNER["name"]:
         role = f' <span class="role">{e(C.OWNER["role"])}</span>' if C.OWNER.get("role") else ""
@@ -365,7 +373,7 @@ def build_lang(lang):
 <section class="section"><div class="wrap narrow prose"><h2>{e(P['about_who_h'])}</h2>{who}</div></section>
 {owner_html}
 <section class="section alt"><div class="wrap"><h2>{e(P['about_work_h'])}</h2><div class="grid cards cards-4">{values}</div></div></section>
-<section class="section"><div class="wrap"><h2>{e(P['about_say_h'])}</h2><div class="grid quotes">{quotes}</div>
+<section class="section"><div class="wrap"><h2>{e(P['about_say_h'])}</h2><p class="sub google-line">{g_icon(lang, "g-logo", 24)}{e(ui['google_label'])}</p><div class="grid quotes">{quotes}</div>
 <p class="center"><a class="btn btn-ghost dark" href="index.html#reviews">{e(ui['nav_reviews'])} &rarr;</a></p></div></section>
 <section class="section cta-band"><div class="wrap center"><h2>{e(ui['cta_title'])}</h2><p>{e(ui['cta_text'])}</p>
 <p class="cta-row center-row"><a class="btn" href="contact.html#estimate">{e(ui['cta_btn'])}</a></p></div></section>"""

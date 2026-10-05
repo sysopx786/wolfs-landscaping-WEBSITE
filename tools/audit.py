@@ -94,7 +94,8 @@ def main():
             try: json.loads(blob)
             except Exception as ex: add(f"{f}: invalid form-i18n {ex}")
         for im in p.imgs:
-            if not im.get("alt"): add(f"{f}: image without alt {im.get('src')}")
+            if "alt" not in im: add(f"{f}: image without alt attribute {im.get('src')}")
+            if im.get("alt") == "" and "google-g.png" not in (im.get("src") or ""): add(f"{f}: empty alt on a non-decorative image {im.get('src')}")
             if not (im.get("width") and im.get("height")): add(f"{f}: image without width/height {im.get('src')}")
         for l in p.links:
             if l.startswith("mailto:") or "@" in l: add(f"{f}: email link {l}")

@@ -248,3 +248,16 @@ nav{gap:13px}
 /* the floating Call Now button lives inside the footer; make sure footer link rules never show it on desktop */
 .site-footer a.sticky-call{display:none}
 @media (max-width:980px){.site-footer a.sticky-call{display:block;padding:16px;text-decoration:none;text-align:center}}
+
+/* Google branding: official four-color "G" (unaltered), official yellow for rating stars, clear space around the logo */
+.g-logo{width:24px;height:24px;display:inline-block;vertical-align:middle;margin:0 10px 0 0}
+.g-mini{width:16px;height:16px;display:inline-block;vertical-align:-3px;margin:0 8px 0 0}
+.proof .g-mini{width:18px;height:18px;vertical-align:-4px;margin-right:8px}
+.stars{color:#FBBC05;letter-spacing:2px}
+.google-line{display:flex;align-items:center;flex-wrap:wrap;gap:4px 12px}
+.google-line .g-logo{margin-right:0}
+.btn .g-mini{margin-right:10px;vertical-align:-3px;background:#fff;border-radius:50%;padding:1px}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* on the dark hero the G sits on a white circle so all four brand colors stay clear */
+.proof .g-mini{width:22px;height:22px;padding:3px;background:#fff;border-radius:50%;vertical-align:-6px}
