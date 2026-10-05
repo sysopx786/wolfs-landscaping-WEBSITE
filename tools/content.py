@@ -9,6 +9,9 @@ SITE = dict(
     phone_display="610-357-1098",
     phone_tel="+16103571098",
     google_write_review_url="https://search.google.com/local/writereview?placeid=ChIJ0VPVILEDmSgRVGItL-XDgCI",  # opens the review box (Google asks visitors to sign in first)
+    street="429 Main St", city="Royersford", state="PA", zip="19468",
+    maps_url="https://www.google.com/maps?cid=2486202383414944340",
+    directions_url="https://www.google.com/maps/dir/?api=1&destination=429+Main+St,+Royersford,+PA+19468",
     google_reviews_url="https://www.google.com/maps?cid=2486202383414944340",  # Google Business Profile: Wolf's Landscaping Services
     areas=["Royersford, PA", "Chester County, PA"],
 )
@@ -20,8 +23,8 @@ TOWNS = ["Royersford", "Spring City", "Oaks", "Collegeville", "Kimberton",
 # Owner details for the About page. Leave empty until the owner confirms them: anything empty is simply not shown.
 # Fill in, then run: python tools/build.py
 OWNER = dict(
-    name=None,            # e.g. "Jane Wolf"
-    role=None,            # e.g. "Owner" (shown next to the name)
+    name="Bryan J. Wolf",
+    role={"en": "Owner", "es": "Propietario"},
     story={"en": [], "es": []},        # paragraphs about how the business started
     credentials={"en": [], "es": []},  # e.g. ["Fully insured", "Techo-Bloc certified installer"]
 )
@@ -409,6 +412,7 @@ PAGES = {
   contact_title="Contact & Free Estimate", contact_desc="Request a free landscaping estimate from Wolf's Landscaping Services in Royersford and Chester County, PA. Call or send your request by text.", contact_h="Contact & free estimate",
   contact_lead="Tell us about your project. We'll get back to you by text or phone.",
   contact_call="Prefer to talk? Call", contact_miss="Or send your details with the form below and we'll get back to you.",
+  visit_h="Our office", visit_p="Find us on Main Street in Royersford.", directions="Get directions", view_map="View on Google Maps",
   form=dict(name="Name", phone="Phone", email="Email (optional)", address="Property address or town", service="Service needed", choose="Choose one…",
             message="Tell us about the project", pref="Best way to reach you", prefs=["Text", "Email", "Phone call"],
             submit="Prepare my request", help="We'll write your request as a text message, then you choose how to send it. Prefer to talk? Call 610-357-1098.",
@@ -483,6 +487,7 @@ PAGES = {
   contact_title="Contacto y cotización gratis", contact_desc="Solicite una cotización gratis de paisajismo a Wolf's Landscaping Services en Royersford y el condado de Chester, PA. Llame o envíe su solicitud por mensaje de texto.", contact_h="Contacto y cotización gratis",
   contact_lead="Cuéntenos sobre su proyecto. Le respondemos por mensaje de texto o llamada.",
   contact_call="¿Prefiere hablar? Llame al", contact_miss="O envíe sus datos con el formulario y le responderemos.",
+  visit_h="Nuestra oficina", visit_p="Nos encuentra en Main Street, en Royersford.", directions="Cómo llegar", view_map="Ver en Google Maps",
   form=dict(name="Nombre", phone="Teléfono", email="Correo electrónico (opcional)", address="Dirección o ciudad de la propiedad", service="Servicio que necesita", choose="Elija uno…",
             message="Cuéntenos sobre el proyecto", pref="Mejor forma de contactarlo", prefs=["Mensaje de texto", "Correo electrónico", "Llamada"],
             submit="Preparar mi solicitud", help="Escribiremos su solicitud como mensaje de texto y usted elige cómo enviarla. ¿Prefiere hablar? Llame al 610-357-1098.",

@@ -149,6 +149,10 @@ def header(lang, key):
 </header>"""
 
 
+def addr_html(sep="<br>"):
+    return f'{e(SITE["street"])}{sep}{e(SITE["city"])}, {e(SITE["state"])} {e(SITE["zip"])}'
+
+
 def footer(lang):
     ui = C.UI[lang]
     a = asset(lang)
@@ -156,6 +160,7 @@ def footer(lang):
     return f"""<footer class="site-footer">
   <div class="wrap foot">
     <div><strong>{e(SITE['name'])}</strong><br>{e(ui['footer_area'])}</div>
+    <div><address>{addr_html()}<br><a href="{SITE['maps_url']}" target="_blank" rel="noopener">{e(C.PAGES[lang]['view_map'])}</a></address></div>
     <div><a href="tel:{SITE['phone_tel']}">{SITE['phone_display']}</a></div>
     <div><a href="privacy.html">{e(ui['privacy'])}</a> &middot; <a href="{other_home}" hreflang="{other(lang)}" lang="{other(lang)}">{e(ui['switch_label'])}</a> &middot; &copy; <span id="year"></span> {e(SITE['name'])}</div>
   </div>
@@ -189,7 +194,8 @@ def business_ld():
     return {
         "@type": "LandscapingBusiness", "@id": f"{URL}/#business", "name": SITE["name"], "url": URL + "/",
         "telephone": SITE["phone_tel"], "image": f"{URL}/og-image.jpg",
-        "address": {"@type": "PostalAddress", "addressLocality": "Royersford", "addressRegion": "PA", "addressCountry": "US"},
+        "address": {"@type": "PostalAddress", "streetAddress": SITE["street"], "addressLocality": SITE["city"], "addressRegion": SITE["state"], "postalCode": SITE["zip"], "addressCountry": "US"},
+        "hasMap": SITE["maps_url"], "founder": {"@type": "Person", "name": C.OWNER["name"], "jobTitle": "Owner"},
         "description": "Owner-operated lawn care, landscape design, hardscaping and retaining walls in Royersford and Chester County, PA.",
         "areaServed": [{"@type": "City", "name": "Royersford", "address": {"@type": "PostalAddress", "addressRegion": "PA", "addressCountry": "US"}},
                        {"@type": "AdministrativeArea", "name": "Chester County, PA"}],
@@ -403,7 +409,7 @@ def build_lang(lang):
     quotes = "".join(f'<blockquote><p>“{e(q)}”</p><cite>{g_icon(lang, "g-mini", 16)}{e(n)}</cite></blockquote>' for q, n in P["about_quotes"])
     owner_html = ""
     if C.OWNER["name"]:
-        role = f' <span class="role">{e(C.OWNER["role"])}</span>' if C.OWNER.get("role") else ""
+        role = f' <span class="role">&middot; {e(C.OWNER["role"][lang])}</span>' if C.OWNER.get("role") else ""
         owner_html += f'<section class="section"><div class="wrap narrow prose"><h2>{e(P["about_owner_h"])}</h2><p class="owner-name"><strong>{e(C.OWNER["name"])}</strong>{role}</p></div></section>'
     if C.OWNER["story"][lang]:
         owner_html += f'<section class="section alt"><div class="wrap narrow prose"><h2>{e(P["about_story_h"])}</h2>' + "".join(f"<p>{e(p)}</p>" for p in C.OWNER["story"][lang]) + "</div></section>"
@@ -445,6 +451,9 @@ def build_lang(lang):
   <div class="quote-copy">
     <p class="phone">{e(P['contact_call'])} <a href="tel:{SITE['phone_tel']}">{SITE['phone_display']}</a></p>
     <p>{e(P['contact_miss'])}</p>
+    <h2 class="h3">{e(P['visit_h'])}</h2>
+    <address class="visit"><strong>{e(SITE['name'])}</strong><br>{addr_html()}</address>
+    <p class="visit-links"><a class="btn btn-small" href="{SITE['directions_url']}" target="_blank" rel="noopener">{e(P['directions'])}</a> <a class="btn btn-ghost btn-small dark" href="{SITE['maps_url']}" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(P['view_map'])}</a></p>
     <h2 class="h3">{e(P['area_h'])}</h2>
     <p>{e(P['area_p'])}</p>
     <ul class="towns">{towns}</ul>

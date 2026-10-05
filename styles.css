@@ -322,3 +322,12 @@ nav{gap:13px}
 @media (max-width:360px){
   .hero .cta-row .btn:first-child{padding:12px 16px;font-size:.95rem}
 }
+
+/* address, owner name and map links */
+address{font-style:normal}
+.site-footer address{line-height:1.55}
+.site-footer address a{color:inherit;text-decoration:underline;text-underline-offset:3px;display:inline-block;padding:10px 0}
+.visit{margin:0 0 12px;line-height:1.6}
+.visit-links{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 28px}
+.owner-name{font-size:1.25rem;margin:0}
+.owner-name .role{color:var(--stone);font-weight:400}
