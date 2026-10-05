@@ -121,9 +121,10 @@ def header(lang, key):
       <a href="faq.html"{cur('faq')}>{e(ui['nav_faq'])}</a>
       <a href="contact.html"{cur('contact')}>{e(ui['nav_contact'])}</a>
       <a class="btn btn-small" href="contact.html#estimate">{e(ui['nav_estimate'])}</a>
-      <a class="lang" href="{other_href}" hreflang="{other(lang)}" lang="{other(lang)}" title="{e(ui['switch_title'])}">{e(ui['switch_label'])}</a>
+      <a class="lang lang-nav" href="{other_href}" hreflang="{other(lang)}" lang="{other(lang)}" title="{e(ui['switch_title'])}">{e(ui['switch_label'])}</a>
     </nav>
     <a class="call" href="tel:{SITE['phone_tel']}">{SITE['phone_display']}</a>
+    <a class="lang lang-bar" href="{other_href}" hreflang="{other(lang)}" lang="{other(lang)}" title="{e(ui['switch_title'])}" aria-label="{e(ui['switch_label'])}">{e(ui['switch_short'])}</a>
     <button class="menu" type="button" aria-label="{e(ui['menu'])}" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
   </div>
 </header>"""

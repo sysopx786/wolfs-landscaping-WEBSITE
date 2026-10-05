@@ -44,8 +44,19 @@ def jobs():
 
 def shoot_one(port, lang, page, size, out):
     w, h = size
-    subprocess.run([browser(), "--headless=new", "--disable-gpu", "--hide-scrollbars", f"--window-size={w},{h}",
-                    "--virtual-time-budget=10000", f"--screenshot={out}", f"http://127.0.0.1:{port}/{lang}{page}.html"],
+    url = f"http://127.0.0.1:{port}/{lang}{page}.html"
+    win_w = w
+    if w < 600:
+        # headless Chrome will not render a window narrower than ~500px, which would crop the page.
+        # Show the page inside an iframe of the true phone width instead.
+        os.makedirs(TESTS, exist_ok=True)
+        wrapper = os.path.join(TESTS, "_frame.html")
+        with open(wrapper, "w", encoding="utf-8") as f:
+            f.write(f'<!DOCTYPE html><html><body style="margin:0;background:#888"><iframe src="/{lang}{page}.html" width="{w}" height="{h}" style="border:0;display:block;background:#fff"></iframe></body></html>')
+        url = f"http://127.0.0.1:{port}/tests/_frame.html"
+        win_w = w + 20
+    subprocess.run([browser(), "--headless=new", "--disable-gpu", "--hide-scrollbars", f"--window-size={win_w},{h}",
+                    "--virtual-time-budget=10000", f"--screenshot={out}", url],
                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=90)
 
 

@@ -26,7 +26,7 @@ OWNER = dict(
 
 UI = {
  "en": dict(
-    lang_name="English", switch_label="Español", switch_title="Ver este sitio en español",
+    lang_name="English", switch_label="Español", switch_short="ES", switch_title="Ver este sitio en español",
     skip="Skip to content", menu="Menu", services_menu="Show services menu",
     nav_home="Home", nav_services="Services", nav_gallery="Gallery", nav_reviews="Reviews",
     nav_about="About", nav_faq="FAQ", nav_contact="Contact", nav_estimate="Free Estimate", call="Call",
@@ -44,7 +44,7 @@ UI = {
     sticky_call="Call Now",
  ),
  "es": dict(
-    lang_name="Español", switch_label="English", switch_title="View this site in English",
+    lang_name="Español", switch_label="English", switch_short="EN", switch_title="View this site in English",
     skip="Saltar al contenido", menu="Menú", services_menu="Mostrar menú de servicios",
     nav_home="Inicio", nav_services="Servicios", nav_gallery="Galería", nav_reviews="Reseñas",
     nav_about="Nosotros", nav_faq="Preguntas", nav_contact="Contacto", nav_estimate="Cotización gratis", call="Llamar",
