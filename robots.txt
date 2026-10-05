@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-# Search and AI-answer crawlers are welcome
+# Search and answer-engine crawlers are welcome
 User-agent: OAI-SearchBot
 Allow: /
 

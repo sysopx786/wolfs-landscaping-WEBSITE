@@ -14,5 +14,5 @@
 - [About](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/about.html)
 - [FAQ](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/faq.html)
 - [Contact and free estimate](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/contact.html)
-- [Gallery](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/gallery.html): AI-generated concept illustrations, not photos of finished projects
+- [Gallery](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/gallery.html): illustrations of what the services can look like, not photos of finished projects
 - [Español](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/es/index.html): Spanish version of this site
