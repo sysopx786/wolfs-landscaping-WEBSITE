@@ -40,6 +40,15 @@ def g_icon(lang, cls="g-logo", size=24, alt=""):
     return f'<img class="{cls}" src="{asset(lang)}brand/google-g.png" alt="{e(alt)}" width="{size}" height="{size}" decoding="async">'
 
 
+def rating_link(lang):
+    """Stars + rating + 'Reviews from Google (N)' as a single link to the on-site Reviews page."""
+    ui = C.UI[lang]
+    return (f'<a class="rating-link" href="reviews.html" title="{e(ui["see_all"])}">{g_icon(lang, "g-logo", 24)}'
+            f'<span class="stars" aria-hidden="true">★★★★★</span> <strong aria-hidden="true">{C.REVIEWS_META["rating"]}</strong>'
+            f'<span class="sr-only">{e(ui["rating_sr"])}.</span> <span class="google-label">{e(ui["google_label"])} ({C.REVIEWS_META["count"]})</span>'
+            f'<span class="sr-only"> &mdash; {e(ui["see_all"])}</span></a>')
+
+
 def pub_url(lang, key):
     return f"{URL}/{prefix(lang)}{fname(key)}"
 
@@ -292,14 +301,12 @@ def build_lang(lang):
     <p class="eyebrow">{e(P['eyebrow'])}</p>
     <h1>{e(P['h1'])}</h1>
     <p class="lead">{e(P['lead'])}</p>
+    <p class="hero-rating">{rating_link(lang)}</p>
     <div class="cta-row">
       <a class="btn" href="contact.html#estimate">{e(ui['cta_btn'])}</a>
       <a class="btn btn-ghost" href="tel:{SITE['phone_tel']}">{e(ui['call'])} {SITE['phone_display']}</a>
     </div>
-    <div class="hero-reviews">
-      <p class="google-line">{g_icon(lang, "g-logo", 24)}<span class="stars" aria-hidden="true">★★★★★</span> <strong>{C.REVIEWS_META["rating"]}</strong> <span class="sr-only">{e(ui['rating_sr'])}</span> <span class="google-label">{e(ui['google_label'])} ({C.REVIEWS_META['count']})</span></p>
-      <p class="btn-row"><a class="btn btn-small" href="{C.SITE['google_write_review_url']}" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(ui['write_btn'])}</a> <a class="btn btn-ghost btn-small" href="reviews.html">{e(ui['see_all'])}</a></p>
-    </div>
+    <p class="hero-review-cta"><a class="btn btn-small" href="{C.SITE['google_write_review_url']}" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(ui['write_btn'])}</a></p>
     <ul class="proof">{proof}</ul>
   </div>
 </section>
@@ -320,10 +327,10 @@ def build_lang(lang):
 </div></section>
 <section id="reviews" class="section alt"><div class="wrap">
   <h2>{e(P['reviews_h'])}</h2>
-  <p class="sub google-line">{g_icon(lang, "g-logo", 24)}<span class="stars" aria-hidden="true">★★★★★</span> <strong>{C.REVIEWS_META["rating"]}</strong> <span class="sr-only">{e(ui['rating_sr'])}</span> <span class="google-label">{e(ui['google_label'])} ({C.REVIEWS_META['count']})</span></p>
+  <p class="sub reviews-head">{rating_link(lang)}</p>
   {orig}
   <div class="grid quotes">{quotes}</div>
-  <p class="center btn-row"><a class="btn" href="{C.SITE['google_write_review_url']}" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(ui['write_btn'])}</a> <a class="btn btn-ghost dark" href="reviews.html">{e(ui['see_all'])}</a></p>
+  <p class="center btn-row"><a class="btn" href="{C.SITE['google_write_review_url']}" target="_blank" rel="noopener">{g_icon(lang, "g-mini", 18)}{e(ui['write_btn'])}</a></p>
 </div></section>
 <section id="areas" class="section"><div class="wrap two">
   <div><h2>{e(P['area_h'])}</h2><p>{e(P['area_p'])}</p><ul class="towns">{towns}</ul></div>

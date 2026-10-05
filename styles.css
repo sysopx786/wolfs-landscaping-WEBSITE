@@ -284,3 +284,27 @@ nav{gap:13px}
 .hero-reviews .google-label{color:#e3ead9}
 .hero-reviews .g-logo{background:#fff;border-radius:50%;padding:3px;width:30px;height:30px}
 .hero-reviews .btn-row{justify-content:flex-start;gap:10px}
+
+/* rating line as a link to the Reviews page (shown above the hero buttons so it is visible on phones) */
+.rating-link{display:inline-flex;align-items:center;flex-wrap:wrap;gap:2px 8px;min-height:44px;text-decoration:none;color:inherit}
+.rating-link .g-logo{margin:0 2px 0 0}
+.rating-link .google-label{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.rating-link:hover .google-label{text-decoration-thickness:2px}
+.rating-link strong{font-weight:600}
+.hero-rating{margin:0 0 6px}
+.hero .rating-link{color:#fff;font-weight:500}
+.hero .rating-link .g-logo{background:#fff;border-radius:50%;padding:3px;width:30px;height:30px}
+.hero .rating-link .google-label{color:#e3ead9}
+.hero .cta-row{margin-bottom:14px}
+.hero-review-cta{margin:0 0 30px}
+.reviews-head{margin:0 0 32px;font-size:1.05rem}
+.reviews-head .rating-link{color:var(--ink)}
+.reviews-head .google-label{color:var(--green)}
+
+/* tighter phone banner so the rating link and the main buttons are visible without scrolling */
+@media (max-width:640px){
+  .hero{padding:36px 0 32px}
+  .hero .eyebrow{margin-bottom:10px}
+  .hero h1{margin-bottom:.35em}
+  .hero .lead{font-size:1.05rem;margin-bottom:14px}
+}
