@@ -37,7 +37,7 @@ def fonts():
 def images():
     src = os.path.join(ROOT, "photos")
     for f in sorted(os.listdir(src)):
-        if not re.fullmatch(r"(wall|walkway|bed)-(before|after)\.jpg", f):
+        if not re.fullmatch(r"[a-z]+-(before|after)\.jpg", f):
             continue
         base = f[:-4]
         im = Image.open(os.path.join(src, f)).convert("RGB")

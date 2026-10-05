@@ -297,6 +297,21 @@ SHOTS = [
  dict(key="bed", link="landscape-design",
   en=dict(title="Garden bed redesign", before="Overgrown, weedy garden bed with scraggly shrubs along a house", after="The same bed redone with dark mulch, flowers, a shaped edge and healthy shrubs", linkname="landscape design"),
   es=dict(title="Rediseño de cama de jardín", before="Cama de jardín descuidada y llena de maleza, con arbustos ralos junto a una casa", after="La misma cama rehecha con mantillo oscuro, flores, un borde definido y arbustos sanos", linkname="diseño de paisajes")),
+ dict(key="firepit", link="hardscaping",
+  en=dict(title="Stone patio and seating wall", before="Bare, patchy slope behind a deck with compacted dirt and weeds", after="The same yard with a round stone paver patio, a curved stone seating wall, a fire pit, a flagstone path and a green lawn", linkname="hardscaping"),
+  es=dict(title="Patio de piedra y muro para sentarse", before="Pendiente sin césped detrás de una terraza, con tierra compactada y maleza", after="El mismo patio con un patio redondo de adoquines de piedra, un muro curvo para sentarse, un fogón, un camino de lajas y césped verde", linkname="hardscaping")),
+ dict(key="driveway", link="hardscaping",
+  en=dict(title="Paver driveway", before="Old cracked and stained concrete driveway in front of a stone and siding house", after="The same driveway replaced with gray pavers, a dark charcoal border and crisp lawn edges", linkname="hardscaping"),
+  es=dict(title="Entrada de adoquines", before="Entrada de concreto vieja, agrietada y manchada frente a una casa de piedra", after="La misma entrada reemplazada con adoquines grises, un borde gris oscuro y bordes de césped definidos", linkname="hardscaping")),
+ dict(key="stonewall", link="retaining-walls",
+  en=dict(title="Stone retaining wall and mulch beds", before="Steep, overgrown grassy bank in front of a house with bare patches and dead shrubs", after="The same bank rebuilt with a tiered stone retaining wall, mulch beds, daffodils and a trimmed hedge", linkname="retaining walls"),
+  es=dict(title="Muro de piedra y camas con mantillo", before="Talud empinado y descuidado frente a una casa, con zonas sin pasto y arbustos secos", after="El mismo talud reconstruido con un muro de contención de piedra por niveles, camas con mantillo, narcisos y un seto recortado", linkname="muros de contención")),
+ dict(key="perennial", link="landscape-design",
+  en=dict(title="Boulder and flower bed", before="Neglected strip beside a house with weeds, bare soil and a few half-buried rocks", after="The same strip as a landscaped bed with boulders, purple salvia, pink peonies, fresh mulch and a curved lawn edge", linkname="landscape design"),
+  es=dict(title="Cama de rocas y flores", before="Franja descuidada junto a una casa, con maleza, tierra expuesta y algunas rocas medio enterradas", after="La misma franja convertida en una cama con rocas grandes, salvia morada, peonías rosadas, mantillo nuevo y un borde de césped curvo", linkname="diseño de paisajes")),
+ dict(key="sod", link="sod-seeding",
+  en=dict(title="New sod lawn", before="Bare backyard dirt with tire ruts and scattered weeds beside a wooden fence", after="The same yard with a fresh, even green sod lawn edge to edge", linkname="sod and seeding"),
+  es=dict(title="Césped nuevo en rollo", before="Patio trasero con tierra expuesta, huellas de llantas y maleza dispersa junto a una cerca de madera", after="El mismo patio con un césped en rollo nuevo, verde y parejo de orilla a orilla", linkname="césped y siembra")),
 ]
 
 # ---------------------------------------------------------------- reviews (English originals)

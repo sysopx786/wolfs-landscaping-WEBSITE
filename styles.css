@@ -245,3 +245,7 @@ nav{gap:13px}
   .brand svg{width:28px;height:28px}
 }
 @media (max-width:1240px){.lang-bar{align-self:center}}
+
+/* the floating Call Now button lives inside the footer; make sure footer link rules never show it on desktop */
+.site-footer a.sticky-call{display:none}
+@media (max-width:980px){.site-footer a.sticky-call{display:block;padding:16px;text-decoration:none;text-align:center}}
