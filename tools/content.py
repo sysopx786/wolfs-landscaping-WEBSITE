@@ -9,6 +9,7 @@ SITE = dict(
     phone_display="610-357-1098",
     phone_tel="+16103571098",
     rating="5.0", review_count=14,   # read from the live Google listing on 2026-10-05
+    google_write_review_url="https://search.google.com/local/writereview?placeid=ChIJ0VPVILEDmSgRVGItL-XDgCI",  # opens the review box (Google asks visitors to sign in first)
     google_reviews_url="https://www.google.com/maps?cid=2486202383414944340",  # Google Business Profile: Wolf's Landscaping Services
     areas=["Phoenixville, PA", "Chester County, PA"],
 )
@@ -39,7 +40,7 @@ UI = {
     privacy="Privacy", back_top="Back to top", before="Before", after="After",
     slider_hint="Drag the handle, or use the arrow keys, to compare each before and after.",
     gallery_cta="Want something like this?", see_more_ba="See more before & afters",
-    google_label="Reviews from Google", rating_sr="Rated 5.0 out of 5 stars on Google", google_btn="Read all reviews on Google",
+    google_label="Reviews from Google", rating_sr="Rated 5.0 out of 5 stars on Google", google_btn="Read all reviews on Google", write_btn="Leave a review on Google",
     reviews_orig="",
     sticky_call="Call Now",
  ),
@@ -55,7 +56,7 @@ UI = {
     privacy="Privacidad", back_top="Volver arriba", before="Antes", after="Después",
     slider_hint="Arrastre el control, o use las flechas del teclado, para comparar el antes y el después.",
     gallery_cta="¿Quiere algo así?", see_more_ba="Ver más antes y después",
-    google_label="Reseñas de Google", rating_sr="Calificación de 5.0 sobre 5 estrellas en Google", google_btn="Leer todas las reseñas en Google",
+    google_label="Reseñas de Google", rating_sr="Calificación de 5.0 sobre 5 estrellas en Google", google_btn="Leer todas las reseñas en Google", write_btn="Dejar una reseña en Google",
     reviews_orig="Reseñas originales en inglés, tal como las escribieron nuestros clientes.",
     sticky_call="Llamar ahora",
  ),

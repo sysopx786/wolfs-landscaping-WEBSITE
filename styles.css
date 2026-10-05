@@ -261,3 +261,5 @@ nav{gap:13px}
 
 /* on the dark hero the G sits on a white circle so all four brand colors stay clear */
 .proof .g-mini{width:22px;height:22px;padding:3px;background:#fff;border-radius:50%;vertical-align:-6px}
+
+.btn-row{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
