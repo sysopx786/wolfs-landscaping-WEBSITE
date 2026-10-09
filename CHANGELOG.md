@@ -1,8 +1,5 @@
 # Changelog
 
-## 2026-10-09: New logo
-- The supplied logo replaces the drawn mark: round emblem in the header, full logo in the footer, wolf head as the tab and touch icon, and the social preview image. The Join the team page uses the new "Join the Pack" card sheet as its poster, with the four role cards as text links.
-
 ## 2026-10-09: Join the team
 - New "Join the team" page in English and Spanish: what we look for, how to apply by call or text, and four role cards linking to the services. Linked in the menu and footer and listed in the sitemap.
 

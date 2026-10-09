@@ -51,12 +51,11 @@ def images():
 # ---------- social preview (branded graphic, not an AI project image) ----------
 def og():
     W, H = 1200, 630
-    im = Image.new("RGB", (W, H), (0, 0, 0))
-    logo = Image.open(os.path.join(ROOT, "brand", "logo-wolfs.jpg")).convert("RGB")
-    w = 1120
-    logo = logo.resize((w, round(logo.height * w / logo.width)), Image.LANCZOS)
-    im.paste(logo, ((W - w) // 2, 70))
+    im = Image.new("RGB", (W, H), "#1f3f28")
     d = ImageDraw.Draw(im)
+    for i in range(H):  # subtle vertical gradient
+        c = int(31 + (i / H) * 25)
+        d.line([(0, i), (W, i)], fill=(c, 63 + int(i / H * 30), 40 + int(i / H * 20)))
     def font(names, size):
         for n in names:
             try:
@@ -64,10 +63,15 @@ def og():
             except OSError:
                 pass
         return ImageFont.load_default()
-    f = font(["segoeui.ttf", "arial.ttf"], 38)
-    t = "Royersford & Chester County, PA  |  Free estimates"
-    tw = d.textlength(t, font=f)
-    d.text(((W - tw) / 2, 90 + logo.height + 20), t, font=f, fill="#a7b46a")
+    serif = ["georgiab.ttf", "georgia.ttf", "times.ttf"]
+    sans = ["segoeui.ttf", "arial.ttf"]
+    d.rounded_rectangle([80, 90, 160, 170], radius=18, fill="#f4efe4")
+    d.polygon([(120, 105), (145, 135), (145, 148), (120, 160), (95, 148), (95, 135)], fill="#2f5d3a")
+    d.text((80, 230), "Wolf's Landscaping Services", font=font(serif, 68), fill="#ffffff")
+    d.text((80, 340), "Lawn care, hardscaping, retaining walls", font=font(sans, 40), fill="#e3ead9")
+    d.text((80, 400), "Royersford & Chester County, PA", font=font(sans, 40), fill="#f1d9a8")
+    d.rounded_rectangle([80, 500, 470, 565], radius=32, fill="#a8651a")
+    d.text((110, 513), "Free estimates", font=font(sans, 36), fill="#ffffff")
     im.save(os.path.join(ROOT, "og-image.jpg"), "JPEG", quality=86, optimize=True)
     print("og-image.jpg", os.path.getsize(os.path.join(ROOT, "og-image.jpg")) // 1024, "KB")
 

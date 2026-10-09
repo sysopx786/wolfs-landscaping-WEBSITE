@@ -114,9 +114,7 @@ def head(lang, key, title, desc, schema=None):
 <meta name="twitter:title" content="{e(full_title)}">
 <meta name="twitter:description" content="{e(desc)}">
 <meta name="twitter:image" content="{URL}/og-image.jpg">
-<link rel="icon" type="image/png" sizes="32x32" href="{a}brand/favicon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="{a}brand/icon-192.png">
-<link rel="apple-touch-icon" href="{a}brand/apple-touch-icon.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232f5d3a'/%3E%3Cpath d='M16 6c4 4 7 8 7 12a7 7 0 0 1-14 0c0-4 3-8 7-12z' fill='%23f4efe4'/%3E%3C/svg%3E">
 <link rel="preload" href="{a}fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{a}fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{a}styles.css?v={VER['css']}">
@@ -135,7 +133,7 @@ def header(lang, key):
 <header class="site-header">
   <div class="wrap bar">
     <a class="brand" href="index.html" aria-label="{e(SITE['name'])}">
-      <img class="brand-mark" src="{a}brand/logo-emblem-1x.png" srcset="{a}brand/logo-emblem-1x.png 1x, {a}brand/logo-emblem-2x.png 2x" alt="" width="64" height="58" decoding="async">
+      <svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2f5d3a"/><path d="M16 6c4 4 7 8 7 12a7 7 0 0 1-14 0c0-4 3-8 7-12z" fill="#f4efe4"/></svg>
       <span>Wolf's <em>Landscaping</em></span>
     </a>
     <nav id="nav" aria-label="Main">
@@ -166,7 +164,6 @@ def footer(lang):
     a = asset(lang)
     other_home = ("../" if lang == "es" else "es/") + "index.html"
     return f"""<footer class="site-footer">
-  <div class="wrap foot-logo"><a href="index.html" aria-label="{e(SITE['name'])}"><picture><source type="image/webp" srcset="{a}brand/logo-640.webp 640w, {a}brand/logo-1024.webp 1024w" sizes="(max-width: 700px) 80vw, 340px"><img src="{a}brand/logo-640.jpg" alt="{e(SITE['name'])}" width="1024" height="434" loading="lazy" decoding="async"></picture></a></div>
   <div class="wrap foot">
     <div><strong>{e(SITE['name'])}</strong><br>{e(ui['footer_area'])}</div>
     <div><address>{addr_html()}<br><a href="{SITE['maps_url']}" target="_blank" rel="noopener">{e(C.PAGES[lang]['view_map'])}</a></address></div>
@@ -501,14 +498,15 @@ def build_lang(lang):
                 f'<picture><source type="image/webp" srcset="{base}-320.webp 320w, {base}-640.webp 640w" sizes="{sizes}">'
                 f'<img src="{base}-640.jpg" alt="{e(alt)}" width="{w}" height="{h}"{ld} decoding="async"></picture>')
     roles = "".join(
-        f'<a class="join-card" href="{svc}.html"><strong>{e(name)}</strong><span class="join-card-text">{e(txt)}</span></a>'
+        f'<a class="join-card" href="{svc}.html">{jpic("join-" + img, alt, 685, 940, "(max-width: 640px) 44vw, 260px")}'
+        f'<span class="join-card-text"><strong>{e(name)}</strong> {e(txt)}</span></a>'
         for name, txt, svc, img, alt in P["join_roles"])
     look = "".join(f"<li>{e(x)}</li>" for x in P["join_look"])
     sms_body = urllib.parse.quote(P["join_sms_body"], safe="")
     intro = "".join(f"<p>{e(x)}</p>" for x in P["join_intro"])
     body = f"""{hero(lang, trail, P['join_h'], P['join_lead'], show_cta=False)}
 <section class="section"><div class="wrap two join-top">
-  <div class="join-poster">{jpic("join-poster", P["join_poster_alt"], 1493, 2000, "(max-width: 900px) 92vw, 480px", lazy=False)}</div>
+  <div class="join-poster">{jpic("join-poster", P["join_poster_alt"], 1496, 1735, "(max-width: 900px) 92vw, 480px", lazy=False)}</div>
   <div class="prose">{intro}
     <h2 class="h3">{e(P['join_look_h'])}</h2><ul class="checks">{look}</ul>
     <h2 class="h3">{e(P['join_apply_h'])}</h2><p>{e(P['join_apply_p'])}</p>
