@@ -144,6 +144,7 @@ def header(lang, key):
       <a href="reviews.html"{cur('reviews')}>{e(ui['nav_reviews'])}</a>
       <a href="faq.html"{cur('faq')}>{e(ui['nav_faq'])}</a>
       <a href="contact.html"{cur('contact')}>{e(ui['nav_contact'])}</a>
+      <a href="join-the-team.html"{cur('join-the-team')}>{e(ui['nav_join'])}</a>
       <a class="btn btn-small" href="contact.html#estimate">{e(ui['nav_estimate'])}</a>
       <a class="lang lang-nav" href="{other_href}" hreflang="{other(lang)}" lang="{other(lang)}" title="{e(ui['switch_title'])}">{e(ui['switch_label'])}</a>
     </nav>
