@@ -15,5 +15,6 @@
 - [Customer reviews](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/reviews.html): reviews from the Google listing
 - [FAQ](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/faq.html)
 - [Contact and free estimate](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/contact.html)
+- [Join the team](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/join-the-team.html): work with the crew
 - [Gallery](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/gallery.html): before and after comparisons for retaining walls, walkways, patios, driveways, garden beds and lawns
 - [Español](https://sysopx786.github.io/wolfs-landscaping-WEBSITE/es/index.html): Spanish version of this site

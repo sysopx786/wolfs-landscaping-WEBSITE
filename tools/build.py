@@ -77,7 +77,7 @@ def write(lang, key, text):
 
 
 # ------------------------------------------------------------------ shared pieces
-NOINDEX = {"join-the-team"}
+NOINDEX = set()
 
 
 def head(lang, key, title, desc, schema=None):
@@ -167,7 +167,7 @@ def footer(lang):
     <div><strong>{e(SITE['name'])}</strong><br>{e(ui['footer_area'])}</div>
     <div><address>{addr_html()}<br><a href="{SITE['maps_url']}" target="_blank" rel="noopener">{e(C.PAGES[lang]['view_map'])}</a></address></div>
     <div><a href="tel:{SITE['phone_tel']}">{SITE['phone_display']}</a></div>
-    <div><a href="privacy.html">{e(ui['privacy'])}</a> &middot; <a href="{other_home}" hreflang="{other(lang)}" lang="{other(lang)}">{e(ui['switch_label'])}</a> &middot; &copy; <span id="year"></span> {e(SITE['name'])}</div>
+    <div><a href="privacy.html">{e(ui['privacy'])}</a> &middot; <a href="join-the-team.html">{e(ui['join_link'])}</a> &middot; <a href="{other_home}" hreflang="{other(lang)}" lang="{other(lang)}">{e(ui['switch_label'])}</a> &middot; &copy; <span id="year"></span> {e(SITE['name'])}</div>
   </div>
   <a class="sticky-call" href="tel:{SITE['phone_tel']}">{e(ui['sticky_call'])}</a>
   <button class="to-top" type="button" aria-label="{e(ui['back_top'])}" hidden>&uarr;</button>
@@ -486,7 +486,7 @@ def build_lang(lang):
 <section class="section"><div class="wrap narrow prose"><p class="notice">{e(P['privacy_draft'])}</p>{parts}</div></section>"""
     page(lang, "privacy", P["privacy_title"], P["privacy_desc"], body, [crumb_ld(lang, "privacy", trail)])
 
-    # ---- join the team (sample page: not in nav, footer or sitemap, noindex)
+    # ---- join the team
     trail = [(P["join_h"], "join-the-team.html")]
     a = asset(lang)
     def jpic(name, alt, w, h, sizes, lazy=True):
@@ -521,7 +521,7 @@ for lg in LANGS:
     build_lang(lg)
 
 # ------------------------------------------------------------------ crawl files
-KEYS = ["index"] + SLUGS + ["about", "reviews", "gallery", "faq", "contact", "privacy"]
+KEYS = ["index"] + SLUGS + ["about", "reviews", "gallery", "faq", "contact", "join-the-team", "privacy"]
 sm = ['<?xml version="1.0" encoding="UTF-8"?>',
       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
 for lg in LANGS:
@@ -569,6 +569,7 @@ llms = f"""# {SITE['name']}
 - [Customer reviews]({URL}/reviews.html): reviews from the Google listing
 - [FAQ]({URL}/faq.html)
 - [Contact and free estimate]({URL}/contact.html)
+- [Join the team]({URL}/join-the-team.html): work with the crew
 - [Gallery]({URL}/gallery.html): before and after comparisons for retaining walls, walkways, patios, driveways, garden beds and lawns
 - [Español]({URL}/es/index.html): Spanish version of this site
 """
