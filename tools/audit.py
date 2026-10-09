@@ -139,7 +139,8 @@ def main():
         for l in locs:
             if not l.startswith(URL + "/"): add(f"sitemap: foreign URL {l}"); continue
             if not os.path.exists(os.path.join(ROOT, l[len(URL) + 1:])): add(f"sitemap: URL has no file {l}")
-        for f in indexable:
+        for f, p in indexable.items():
+            if "noindex" in p.metas.get("robots", ""): continue  # sample pages kept out of the sitemap
             if f"{URL}/{f}" not in locs: add(f"sitemap: missing {f}")
     rb = open(os.path.join(ROOT, "robots.txt"), encoding="utf-8").read() if os.path.exists(os.path.join(ROOT, "robots.txt")) else ""
     if f"Sitemap: {URL}/sitemap.xml" not in rb: add("robots.txt: no Sitemap line")

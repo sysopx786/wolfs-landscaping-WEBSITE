@@ -335,3 +335,12 @@ address{font-style:normal}
 /* two-column checklist inside long service sections */
 .checks.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 28px;margin:0 0 1.2em}
 @media (max-width:640px){.checks.cols{grid-template-columns:1fr}}
+
+/* Join the team (sample page) */
+.join-poster img{width:100%;max-width:480px;height:auto;border-radius:10px;display:block;margin:0 auto;background:#000}
+.join-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin:20px 0 8px}
+.join-card{display:flex;flex-direction:column;gap:10px;color:inherit;text-decoration:none}
+.join-card img{width:100%;height:auto;border-radius:10px;display:block;background:#000}
+.join-card-text{font-size:.98rem;line-height:1.45}
+.join-card:hover .join-card-text strong{text-decoration:underline;text-underline-offset:3px}
+@media (max-width:980px){.join-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}

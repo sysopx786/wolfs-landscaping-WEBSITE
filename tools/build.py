@@ -2,6 +2,7 @@
 Run from anywhere:  python tools/build.py
 Edit copy in tools/content.py, styles in styles.css, behavior in script.js.
 """
+import urllib.parse
 import os, re, json, hashlib, html, datetime
 import content as C
 
@@ -76,6 +77,9 @@ def write(lang, key, text):
 
 
 # ------------------------------------------------------------------ shared pieces
+NOINDEX = {"join-the-team"}
+
+
 def head(lang, key, title, desc, schema=None):
     ui = C.UI[lang]
     a = asset(lang)
@@ -91,6 +95,7 @@ def head(lang, key, title, desc, schema=None):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(full_title)}</title>
 <meta name="description" content="{e(desc)}">
+{'<meta name="robots" content="noindex">' if key in NOINDEX else ""}
 <meta name="theme-color" content="#1f3f28">
 <link rel="canonical" href="{pub_url(lang, key)}">
 {alts}
@@ -480,6 +485,36 @@ def build_lang(lang):
     body = f"""{hero(lang, trail, P['privacy_h'], "", show_cta=False)}
 <section class="section"><div class="wrap narrow prose"><p class="notice">{e(P['privacy_draft'])}</p>{parts}</div></section>"""
     page(lang, "privacy", P["privacy_title"], P["privacy_desc"], body, [crumb_ld(lang, "privacy", trail)])
+
+    # ---- join the team (sample page: not in nav, footer or sitemap, noindex)
+    trail = [(P["join_h"], "join-the-team.html")]
+    a = asset(lang)
+    def jpic(name, alt, w, h, sizes, lazy=True):
+        base = f"{a}photos/{name}"
+        ld = ' loading="lazy"' if lazy else ""
+        return (f'<picture><source type="image/webp" srcset="{base}-480.webp 480w, {base}-800.webp 800w, {base}-1200.webp 1200w" sizes="{sizes}">'
+                f'<img src="{base}-800.jpg" alt="{e(alt)}" width="{w}" height="{h}"{ld} decoding="async"></picture>') if name == "join-poster" else (
+                f'<picture><source type="image/webp" srcset="{base}-320.webp 320w, {base}-640.webp 640w" sizes="{sizes}">'
+                f'<img src="{base}-640.jpg" alt="{e(alt)}" width="{w}" height="{h}"{ld} decoding="async"></picture>')
+    roles = "".join(
+        f'<a class="join-card" href="{svc}.html">{jpic("join-" + img, alt, 685, 940, "(max-width: 640px) 44vw, 260px")}'
+        f'<span class="join-card-text"><strong>{e(name)}</strong> {e(txt)}</span></a>'
+        for name, txt, svc, img, alt in P["join_roles"])
+    look = "".join(f"<li>{e(x)}</li>" for x in P["join_look"])
+    sms_body = urllib.parse.quote(P["join_sms_body"], safe="")
+    intro = "".join(f"<p>{e(x)}</p>" for x in P["join_intro"])
+    body = f"""{hero(lang, trail, P['join_h'], P['join_lead'], show_cta=False)}
+<section class="section"><div class="wrap two join-top">
+  <div class="join-poster">{jpic("join-poster", P["join_poster_alt"], 1496, 1735, "(max-width: 900px) 92vw, 480px", lazy=False)}</div>
+  <div class="prose">{intro}
+    <h2 class="h3">{e(P['join_look_h'])}</h2><ul class="checks">{look}</ul>
+    <h2 class="h3">{e(P['join_apply_h'])}</h2><p>{e(P['join_apply_p'])}</p>
+    <p class="btn-row left"><a class="btn" href="sms:{SITE['phone_tel']}?&amp;body={sms_body}">{e(P['join_sms'])} {SITE['phone_display']}</a> <a class="btn btn-ghost dark" href="tel:{SITE['phone_tel']}">{e(P['join_call'])} {SITE['phone_display']}</a></p>
+  </div>
+</div></section>
+<section class="section alt"><div class="wrap"><h2>{e(P['join_roles_h'])}</h2><div class="join-grid">{roles}</div>
+<p class="more">{e(P['join_note'])} <a href="contact.html#estimate">{e(ui['cta_btn'])}</a></p></div></section>"""
+    page(lang, "join-the-team", P["join_title"], P["join_desc"], body, [crumb_ld(lang, "join-the-team", trail)])
 
 
 for lg in LANGS:
